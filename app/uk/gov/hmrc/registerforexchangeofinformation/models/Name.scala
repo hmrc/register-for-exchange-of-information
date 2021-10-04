@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.registerforexchangeofinformation.controllers
+package uk.gov.hmrc.registerforexchangeofinformation.models
 
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
-import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import javax.inject.{Inject, Singleton}
-import scala.concurrent.Future
+import play.api.libs.json.Json
 
-@Singleton()
-class MicroserviceHelloWorldController @Inject() (cc: ControllerComponents)
-    extends BackendController(cc) {
+//strings between 1 and 35 inclusive ^[a-zA-Z &`\\-\\'^]{1,35}$
+case class Name(firstName: String, secondName: String)
 
-  def hello(): Action[AnyContent] = Action.async { _ =>
-    Future.successful(Ok("Hello world"))
-  }
+object Name {
+  implicit val format = Json.format[Name]
 }

@@ -1,0 +1,56 @@
+/*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package uk.gov.hmrc.registerforexchangeofinformation.connectors
+
+import com.google.inject.Inject
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
+import uk.gov.hmrc.registerforexchangeofinformation.models.{
+  PayloadRegisterWithID,
+  Registration
+}
+
+import scala.concurrent.{ExecutionContext, Future}
+
+class RegistrationConnector @Inject() (
+    val config: AppConfig,
+    val http: HttpClient
+) {
+
+  def sendWithoutIDInformation(
+      registration: Registration
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    val serviceName = "register-without-id"
+    http.POST[Registration, HttpResponse](
+      config.baseUrl(serviceName),
+      registration,
+      headers = extraHeaders(config, serviceName)
+    )(wts = Registration.format, rds = httpReads, hc = hc, ec = ec)
+  }
+
+  def sendWithID(
+      registration: PayloadRegisterWithID
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    val serviceName = "register-with-id"
+    http.POST[PayloadRegisterWithID, HttpResponse](
+      config.baseUrl(serviceName),
+      registration,
+      headers = extraHeaders(config, serviceName)
+    )(wts = PayloadRegisterWithID.format, rds = httpReads, hc = hc, ec = ec)
+  }
+
+}

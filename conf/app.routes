@@ -1,3 +1,10 @@
 # microservice specific routes
 
-GET        /hello-world             uk.gov.hmrc.registerforexchangeofinformation.controllers.MicroserviceHelloWorldController.hello
+# with id
+POST    /registration/individual/utr           uk.gov.hmrc.registerforexchangeofinformation.controllers.RegistrationController.withUTR
+POST    /registration/individual/nino          uk.gov.hmrc.registerforexchangeofinformation.controllers.RegistrationController.withNino
+POST    /registration/organisation/utr         uk.gov.hmrc.registerforexchangeofinformation.controllers.RegistrationController.withOrgUTR
+# without id
+POST    /registration/individual/noId          uk.gov.hmrc.registerforexchangeofinformation.controllers.RegistrationController.withoutID
+POST    /registration/organisation/noId        uk.gov.hmrc.registerforexchangeofinformation.controllers.RegistrationController.withoutOrgID
+
