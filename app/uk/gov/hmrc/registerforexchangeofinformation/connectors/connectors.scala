@@ -48,15 +48,7 @@ import java.util.UUID
 package object connectors {
 
   implicit val httpReads: HttpReads[HttpResponse] =
-    new HttpReads[HttpResponse] {
-
-      override def read(
-          method: String,
-          url: String,
-          response: HttpResponse
-      ): HttpResponse =
-        response
-    }
+    (_: String, _: String, response: HttpResponse) => response
 
   private[connectors] def extraHeaders(
       config: AppConfig,
@@ -71,6 +63,9 @@ package object connectors {
       config.environment(serviceName)
     )
   }
+
+  val stripSession: String => String = (input: String) =>
+    input.replace("session-", "")
 
   private def addHeaders(
       eisEnvironment: String
@@ -89,7 +84,7 @@ package object connectors {
       },
       "x-conversation-id" -> {
         headerCarrier.sessionId
-          .map(_.value)
+          .map(s => stripSession(s.value))
           .getOrElse(UUID.randomUUID().toString)
       },
       "content-type" -> "application/json",

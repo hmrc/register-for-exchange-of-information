@@ -21,6 +21,7 @@ object AppDependencies {
     "org.jsoup" % "jsoup" % "1.12.1" % Test,
     "org.scalatest" %% "scalatest" % "3.1.0" % Test,
     "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
+    "com.github.tomakehurst" % "wiremock-standalone" % "2.27.0" % Test,
     "com.vladsch.flexmark" % "flexmark-all" % "0.36.8" % "test, it"
   )
 

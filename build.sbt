@@ -1,5 +1,6 @@
 import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
+
 val appName = "register-for-exchange-of-information"
 
 val silencerVersion = "1.7.3"
@@ -31,6 +32,7 @@ lazy val microservice = Project(appName, file("."))
     scalafmtOnCompile in Compile := true,
     scalafmtOnCompile in Test := true,
     scalacOptions ++= scalaCompilerOptions,
+
     // ***************
     // Use the silencer plugin to suppress warnings
     scalacOptions += "-P:silencer:pathFilters=routes",
@@ -43,6 +45,7 @@ lazy val microservice = Project(appName, file("."))
     // ***************
   )
   .settings(publishingSettings: _*)
+  .settings(ScoverageSettings.settings: _*)
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)
   .settings(resolvers += Resolver.jcenterRepo)
