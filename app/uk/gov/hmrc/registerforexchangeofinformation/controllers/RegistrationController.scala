@@ -27,8 +27,8 @@ import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
 import uk.gov.hmrc.registerforexchangeofinformation.connectors.RegistrationConnector
 import uk.gov.hmrc.registerforexchangeofinformation.models.{
   ErrorDetails,
-  PayloadRegisterWithID,
-  Registration
+  RegisterWithID,
+  RegisterWithoutId
 }
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -52,8 +52,8 @@ class RegistrationController @Inject() (
   private def withoutIDRegistration(
       request: Request[JsValue]
   )(implicit hc: HeaderCarrier) = {
-    val noIdOrganisationRegistration: JsResult[Registration] =
-      request.body.validate[Registration]
+    val noIdOrganisationRegistration: JsResult[RegisterWithoutId] =
+      request.body.validate[RegisterWithoutId]
 
     noIdOrganisationRegistration.fold(
       invalid = _ => Future.successful(BadRequest("")),
@@ -95,8 +95,8 @@ class RegistrationController @Inject() (
   private def withIdRegistration(
       request: Request[JsValue]
   )(implicit hc: HeaderCarrier) = {
-    val withIDRegistration: JsResult[PayloadRegisterWithID] =
-      request.body.validate[PayloadRegisterWithID]
+    val withIDRegistration: JsResult[RegisterWithID] =
+      request.body.validate[RegisterWithID]
 
     withIDRegistration.fold(
       invalid = _ => Future.successful(BadRequest("")),

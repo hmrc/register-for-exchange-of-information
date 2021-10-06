@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.registerforexchangeofinformation.controllers.generators
+package uk.gov.hmrc.registerforexchangeofinformation.generators
 
 import java.time.{Instant, LocalDate, ZoneOffset}
 

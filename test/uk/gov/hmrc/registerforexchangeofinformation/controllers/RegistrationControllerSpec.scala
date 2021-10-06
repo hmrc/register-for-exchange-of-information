@@ -36,12 +36,12 @@ import uk.gov.hmrc.registerforexchangeofinformation.auth.{
   FakeAuthAction
 }
 import uk.gov.hmrc.registerforexchangeofinformation.base.SpecBase
-import uk.gov.hmrc.registerforexchangeofinformation.controllers.generators.Generators
+import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
 import uk.gov.hmrc.registerforexchangeofinformation.models.{
   ErrorDetail,
   ErrorDetails,
-  PayloadRegisterWithID,
-  Registration,
+  RegisterWithID,
+  RegisterWithoutId,
   SourceFaultDetail
 }
 
@@ -82,7 +82,7 @@ class RegistrationControllerSpec
       "should send data and return ok" in {
         when(
           mockRegistrationConnector
-            .sendWithoutIDInformation(any[Registration]())(
+            .sendWithoutIDInformation(any[RegisterWithoutId]())(
               any[HeaderCarrier](),
               any[ExecutionContext]()
             )
@@ -93,7 +93,7 @@ class RegistrationControllerSpec
             )
           )
 
-        forAll(arbitrary[Registration]) { individualNoIdRegistration =>
+        forAll(arbitrary[RegisterWithoutId]) { individualNoIdRegistration =>
           val request =
             FakeRequest(
               POST,
@@ -109,7 +109,7 @@ class RegistrationControllerSpec
       "should return bad request when one is encountered" in {
         when(
           mockRegistrationConnector
-            .sendWithoutIDInformation(any[Registration]())(
+            .sendWithoutIDInformation(any[RegisterWithoutId]())(
               any[HeaderCarrier](),
               any[ExecutionContext]()
             )
@@ -120,7 +120,7 @@ class RegistrationControllerSpec
             )
           )
 
-        forAll(arbitrary[Registration]) { individualNoIdSubscription =>
+        forAll(arbitrary[RegisterWithoutId]) { individualNoIdSubscription =>
           val request =
             FakeRequest(
               POST,
@@ -136,7 +136,7 @@ class RegistrationControllerSpec
       "should return bad request when Json cannot be validated" in {
         when(
           mockRegistrationConnector
-            .sendWithoutIDInformation(any[Registration]())(
+            .sendWithoutIDInformation(any[RegisterWithoutId]())(
               any[HeaderCarrier](),
               any[ExecutionContext]()
             )
@@ -147,7 +147,7 @@ class RegistrationControllerSpec
             )
           )
 
-        forAll(arbitrary[Registration]) { _ =>
+        forAll(arbitrary[RegisterWithoutId]) { _ =>
           val request =
             FakeRequest(
               POST,
@@ -163,7 +163,7 @@ class RegistrationControllerSpec
       "should return not found when one is encountered" in {
         when(
           mockRegistrationConnector
-            .sendWithoutIDInformation(any[Registration]())(
+            .sendWithoutIDInformation(any[RegisterWithoutId]())(
               any[HeaderCarrier](),
               any[ExecutionContext]()
             )
@@ -174,7 +174,7 @@ class RegistrationControllerSpec
             )
           )
 
-        forAll(arbitrary[Registration]) { individualNoIdSubscription =>
+        forAll(arbitrary[RegisterWithoutId]) { individualNoIdSubscription =>
           val request =
             FakeRequest(
               POST,
@@ -190,7 +190,7 @@ class RegistrationControllerSpec
       "should return forbidden error when authorisation is invalid" in {
         when(
           mockRegistrationConnector
-            .sendWithoutIDInformation(any[Registration]())(
+            .sendWithoutIDInformation(any[RegisterWithoutId]())(
               any[HeaderCarrier](),
               any[ExecutionContext]()
             )
@@ -201,7 +201,7 @@ class RegistrationControllerSpec
             )
           )
 
-        forAll(arbitrary[Registration]) { individualNoIdRegistration =>
+        forAll(arbitrary[RegisterWithoutId]) { individualNoIdRegistration =>
           val request =
             FakeRequest(
               POST,
@@ -218,7 +218,7 @@ class RegistrationControllerSpec
     "for a user with id" - {
       "should send data and return ok" in {
         when(
-          mockRegistrationConnector.sendWithID(any[PayloadRegisterWithID]())(
+          mockRegistrationConnector.sendWithID(any[RegisterWithID]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -229,7 +229,7 @@ class RegistrationControllerSpec
             )
           )
 
-        forAll(arbitrary[PayloadRegisterWithID]) { withIDRegistration =>
+        forAll(arbitrary[RegisterWithID]) { withIDRegistration =>
           val request =
             FakeRequest(
               POST,
@@ -244,7 +244,7 @@ class RegistrationControllerSpec
 
       "should return bad request when one is encountered" in {
         when(
-          mockRegistrationConnector.sendWithID(any[PayloadRegisterWithID]())(
+          mockRegistrationConnector.sendWithID(any[RegisterWithID]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -255,7 +255,7 @@ class RegistrationControllerSpec
             )
           )
 
-        forAll(arbitrary[PayloadRegisterWithID]) { withIdSubscription =>
+        forAll(arbitrary[RegisterWithID]) { withIdSubscription =>
           val request =
             FakeRequest(
               POST,
@@ -270,7 +270,7 @@ class RegistrationControllerSpec
 
       "should return bad request when Json cannot be validated" in {
         when(
-          mockRegistrationConnector.sendWithID(any[PayloadRegisterWithID]())(
+          mockRegistrationConnector.sendWithID(any[RegisterWithID]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -281,7 +281,7 @@ class RegistrationControllerSpec
             )
           )
 
-        forAll(arbitrary[PayloadRegisterWithID]) { _ =>
+        forAll(arbitrary[RegisterWithID]) { _ =>
           val request =
             FakeRequest(
               POST,
@@ -296,7 +296,7 @@ class RegistrationControllerSpec
 
       "should return not found when one is encountered" in {
         when(
-          mockRegistrationConnector.sendWithID(any[PayloadRegisterWithID]())(
+          mockRegistrationConnector.sendWithID(any[RegisterWithID]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -307,7 +307,7 @@ class RegistrationControllerSpec
             )
           )
 
-        forAll(arbitrary[PayloadRegisterWithID]) { withIdSubscription =>
+        forAll(arbitrary[RegisterWithID]) { withIdSubscription =>
           val request =
             FakeRequest(
               POST,
@@ -332,7 +332,7 @@ class RegistrationControllerSpec
           )
         )
         when(
-          mockRegistrationConnector.sendWithID(any[PayloadRegisterWithID]())(
+          mockRegistrationConnector.sendWithID(any[RegisterWithID]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -347,7 +347,7 @@ class RegistrationControllerSpec
             )
           )
 
-        forAll(arbitrary[PayloadRegisterWithID]) { withIdSubscription =>
+        forAll(arbitrary[RegisterWithID]) { withIdSubscription =>
           val request =
             FakeRequest(
               POST,
@@ -362,7 +362,7 @@ class RegistrationControllerSpec
 
       "downstream errors should be recoverable when not in json" in {
         when(
-          mockRegistrationConnector.sendWithID(any[PayloadRegisterWithID]())(
+          mockRegistrationConnector.sendWithID(any[RegisterWithID]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -373,7 +373,7 @@ class RegistrationControllerSpec
             )
           )
 
-        forAll(arbitrary[PayloadRegisterWithID]) { withIdSubscription =>
+        forAll(arbitrary[RegisterWithID]) { withIdSubscription =>
           val request =
             FakeRequest(
               POST,

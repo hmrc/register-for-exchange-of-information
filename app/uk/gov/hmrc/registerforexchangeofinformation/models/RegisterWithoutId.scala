@@ -156,10 +156,10 @@ object RegisterWithoutIDRequest {
   implicit val format = Json.format[RegisterWithoutIDRequest]
 }
 
-case class Registration(
+case class RegisterWithoutId(
     registerWithoutIDRequest: RegisterWithoutIDRequest
 )
 
-object Registration {
-  implicit val format = Json.format[Registration]
+object RegisterWithoutId {
+  implicit val format = Json.format[RegisterWithoutId]
 }

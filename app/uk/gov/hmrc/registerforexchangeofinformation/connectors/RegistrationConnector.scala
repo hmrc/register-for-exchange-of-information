@@ -20,8 +20,8 @@ import com.google.inject.Inject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
 import uk.gov.hmrc.registerforexchangeofinformation.models.{
-  PayloadRegisterWithID,
-  Registration
+  RegisterWithID,
+  RegisterWithoutId
 }
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,24 +32,24 @@ class RegistrationConnector @Inject() (
 ) {
 
   def sendWithoutIDInformation(
-      registration: Registration
+      registration: RegisterWithoutId
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val serviceName = "register-without-id"
-    http.POST[Registration, HttpResponse](
+    http.POST[RegisterWithoutId, HttpResponse](
       config.baseUrl(serviceName),
       registration,
       headers = extraHeaders(config, serviceName)
-    )(wts = Registration.format, rds = httpReads, hc = hc, ec = ec)
+    )(wts = RegisterWithoutId.format, rds = httpReads, hc = hc, ec = ec)
   }
 
   def sendWithID(
-      registration: PayloadRegisterWithID
+      registration: RegisterWithID
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val serviceName = "register-with-id"
-    http.POST[PayloadRegisterWithID, HttpResponse](
+    http.POST[RegisterWithID, HttpResponse](
       config.baseUrl(serviceName),
       registration,
       headers = extraHeaders(config, serviceName)
-    )(wts = PayloadRegisterWithID.format, rds = httpReads, hc = hc, ec = ec)
+    )(wts = RegisterWithID.format, rds = httpReads, hc = hc, ec = ec)
   }
 }

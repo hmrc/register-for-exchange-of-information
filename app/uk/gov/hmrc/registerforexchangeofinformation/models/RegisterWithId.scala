@@ -18,11 +18,11 @@ package uk.gov.hmrc.registerforexchangeofinformation.models
 
 import play.api.libs.json._
 
-case class PayloadRegisterWithID(registerWithIDRequest: RegisterWithIDRequest)
+case class RegisterWithID(registerWithIDRequest: RegisterWithIDRequest)
 
-object PayloadRegisterWithID {
-  implicit val format: Format[PayloadRegisterWithID] =
-    Json.format[PayloadRegisterWithID]
+object RegisterWithID {
+  implicit val format: Format[RegisterWithID] =
+    Json.format[RegisterWithID]
 }
 
 case class RegisterWithIDRequest(

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.registerforexchangeofinformation.controllers.generators
+package uk.gov.hmrc.registerforexchangeofinformation.generators
 
 import java.time.LocalDate
 import org.scalacheck.Arbitrary.arbitrary
@@ -63,14 +63,14 @@ trait ModelGenerators {
     )
   }
 
-  implicit val arbitraryRegistration: Arbitrary[Registration] = Arbitrary {
+  implicit val arbitraryRegistration: Arbitrary[RegisterWithoutId] = Arbitrary {
     for {
       requestCommon <- arbitrary[RequestCommon]
       name <- arbitrary[String]
       address <- arbitrary[Address]
       contactDetails <- arbitrary[ContactDetails]
       identification <- Gen.option(arbitrary[Identification])
-    } yield Registration(
+    } yield RegisterWithoutId(
       RegisterWithoutIDRequest(
         requestCommon,
         RequestDetails(
@@ -128,12 +128,12 @@ trait ModelGenerators {
     )
   }
 
-  implicit val arbitraryPayloadRegisterWithID
-      : Arbitrary[PayloadRegisterWithID] = Arbitrary {
-    for {
-      registerWithIDRequest <- arbitrary[RegisterWithIDRequest]
-    } yield PayloadRegisterWithID(registerWithIDRequest)
-  }
+  implicit val arbitraryPayloadRegisterWithID: Arbitrary[RegisterWithID] =
+    Arbitrary {
+      for {
+        registerWithIDRequest <- arbitrary[RegisterWithIDRequest]
+      } yield RegisterWithID(registerWithIDRequest)
+    }
 
   implicit val arbitraryRegisterWithIDRequest
       : Arbitrary[RegisterWithIDRequest] = Arbitrary {

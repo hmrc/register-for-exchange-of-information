@@ -31,10 +31,10 @@ import uk.gov.hmrc.registerforexchangeofinformation.base.{
   SpecBase,
   WireMockServerHandler
 }
-import uk.gov.hmrc.registerforexchangeofinformation.controllers.generators.Generators
+import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
 import uk.gov.hmrc.registerforexchangeofinformation.models.{
-  PayloadRegisterWithID,
-  Registration
+  RegisterWithID,
+  RegisterWithoutId
 }
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -59,7 +59,7 @@ class RegistrationConnectorSpec
     "for a registration without id submission" - {
       "must return status as OK for submission of Subscription" in {
 
-        forAll(arbitrary[Registration]) { sub =>
+        forAll(arbitrary[RegisterWithoutId]) { sub =>
           stubResponse(
             "/register-without-id/v1",
             OK
@@ -72,7 +72,7 @@ class RegistrationConnectorSpec
 
       "must return status as BAD_REQUEST for submission of invalid subscription" in {
 
-        forAll(arbitrary[Registration]) { sub =>
+        forAll(arbitrary[RegisterWithoutId]) { sub =>
           stubResponse(
             "/register-without-id/v1",
             BAD_REQUEST
@@ -85,7 +85,7 @@ class RegistrationConnectorSpec
 
       "must return status as INTERNAL_SERVER_ERROR for submission for a technical error" in {
 
-        forAll(arbitrary[Registration]) { sub =>
+        forAll(arbitrary[RegisterWithoutId]) { sub =>
           stubResponse(
             "/register-without-id/v1",
             INTERNAL_SERVER_ERROR
@@ -100,7 +100,7 @@ class RegistrationConnectorSpec
     "for a registration with id submission" - {
       "must return status as OK for submission of Subscription" in {
 
-        forAll(arbitrary[PayloadRegisterWithID]) { sub =>
+        forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
             "/register-with-id/v1",
             OK
@@ -113,7 +113,7 @@ class RegistrationConnectorSpec
 
       "must return status as BAD_REQUEST for submission of invalid subscription" in {
 
-        forAll(arbitrary[PayloadRegisterWithID]) { sub =>
+        forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
             "/register-with-id/v1",
             BAD_REQUEST
@@ -126,7 +126,7 @@ class RegistrationConnectorSpec
 
       "must return status as INTERNAL_SERVER_ERROR for submission for a technical error" in {
 
-        forAll(arbitrary[PayloadRegisterWithID]) { sub =>
+        forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
             "/register-with-id/v1",
             INTERNAL_SERVER_ERROR
