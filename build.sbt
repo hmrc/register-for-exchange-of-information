@@ -32,7 +32,7 @@ lazy val microservice = Project(appName, file("."))
     scalafmtOnCompile in Compile := true,
     scalafmtOnCompile in Test := true,
     scalacOptions ++= scalaCompilerOptions,
-
+    PlayKeys.playDefaultPort := 10016,
     // ***************
     // Use the silencer plugin to suppress warnings
     scalacOptions += "-P:silencer:pathFilters=routes",
