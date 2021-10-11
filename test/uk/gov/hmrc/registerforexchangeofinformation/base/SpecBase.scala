@@ -60,6 +60,8 @@ trait SpecBase
 
   protected def applicationBuilder(): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
-      .configure(Configuration("metrics.enabled" -> "false"))
+      .configure(
+        Configuration("metrics.enabled" -> "false", "auditing.enabled" -> false)
+      )
       .overrides()
 }
