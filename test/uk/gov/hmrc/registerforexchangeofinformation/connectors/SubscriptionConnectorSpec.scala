@@ -58,7 +58,7 @@ class SubscriptionConnectorSpec
     "create subscription" - {
       "must return status as OK for submission of Subscription" in {
         stubResponse(
-          "/mdr/dct03/v1",
+          "/register-for-exchange-of-information-stubs/mdr/dct03/v1",
           OK
         )
 
@@ -73,7 +73,7 @@ class SubscriptionConnectorSpec
         forAll(arbitrary[CreateSubscriptionForMDRRequest], errorCodes) {
           (sub, errorCode) =>
             stubResponse(
-              "/mdr/dct03/v1",
+              "/register-for-exchange-of-information-stubs/mdr/dct03/v1",
               errorCode
             )
 
