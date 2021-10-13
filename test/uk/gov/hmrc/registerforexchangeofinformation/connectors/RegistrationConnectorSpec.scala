@@ -61,7 +61,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithoutId]) { sub =>
           stubResponse(
-            "/register-for-exchange-of-information-stubs/register-without-id/v1",
+            "/register-without-id/v1",
             OK
           )
 
@@ -74,7 +74,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithoutId]) { sub =>
           stubResponse(
-            "/register-for-exchange-of-information-stubs/register-without-id/v1",
+            "/register-without-id/v1",
             BAD_REQUEST
           )
 
@@ -86,8 +86,8 @@ class RegistrationConnectorSpec
       "must return status as INTERNAL_SERVER_ERROR for submission for a technical error" in {
 
         forAll(arbitrary[RegisterWithoutId]) { sub =>
-          stubResponse(
-            "/register-for-exchange-of-information-stubs/register-without-id/v1",
+          stubResponse(t
+            "/register-without-id/v1",
             INTERNAL_SERVER_ERROR
           )
 
@@ -102,7 +102,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
-            "/register-for-exchange-of-information-stubs/register-with-id/v1",
+            "/register-with-id/v1",
             OK
           )
 
@@ -115,7 +115,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
-            "/register-for-exchange-of-information-stubs/register-with-id/v1",
+            "/register-with-id/v1",
             BAD_REQUEST
           )
 
@@ -128,7 +128,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
-            "/register-for-exchange-of-information-stubs/register-with-id/v1",
+            "/register-with-id/v1",
             INTERNAL_SERVER_ERROR
           )
 
