@@ -196,6 +196,38 @@ class SubscriptionControllerSpec
       }
     }
 
+    "should return INTERNAL_SERVER_ERROR when EIS fails" in {
+      when(
+        mockSubscriptionConnector
+          .sendSubscriptionInformation(any[CreateSubscriptionForMDRRequest]())(
+            any[HeaderCarrier](),
+            any[ExecutionContext]()
+          )
+      )
+        .thenReturn(
+          Future.successful(
+            HttpResponse(
+              BAD_GATEWAY,
+              Json.obj(),
+              Map.empty[String, Seq[String]]
+            )
+          )
+        )
+
+      forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
+        subscriptionForMDRRequest =>
+          val request =
+            FakeRequest(
+              POST,
+              routes.SubscriptionController.createSubscription().url
+            )
+              .withJsonBody(Json.toJson(subscriptionForMDRRequest))
+
+          val result = route(application, request).value
+          status(result) mustEqual INTERNAL_SERVER_ERROR
+      }
+    }
+
     "should return CONFLICT when one occurs" in {
       val errorDetails = ErrorDetails(
         ErrorDetail(
