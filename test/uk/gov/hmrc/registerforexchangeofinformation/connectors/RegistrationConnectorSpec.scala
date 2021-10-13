@@ -86,7 +86,7 @@ class RegistrationConnectorSpec
       "must return status as INTERNAL_SERVER_ERROR for submission for a technical error" in {
 
         forAll(arbitrary[RegisterWithoutId]) { sub =>
-          stubResponse(t
+          stubResponse(
             "/register-without-id/v1",
             INTERNAL_SERVER_ERROR
           )
