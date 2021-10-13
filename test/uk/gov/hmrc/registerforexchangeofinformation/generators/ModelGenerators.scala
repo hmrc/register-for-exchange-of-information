@@ -57,7 +57,7 @@ trait ModelGenerators {
 
     } yield RequestCommon(
       receiptDate = receiptDate,
-      regime = "DAC",
+      regime = "MDR",
       acknowledgementReference = acknowledgementRef,
       None
     )
@@ -182,4 +182,118 @@ trait ModelGenerators {
         )
       } yield WithIDOrganisation(organisationName, organisationType)
     }
+
+  implicit val arbitraryRequestCommonForSubscription
+      : Arbitrary[RequestCommonForSubscription] =
+    Arbitrary {
+      for {
+        receiptDate <- arbitrary[String]
+        acknowledgementRef <- stringsWithMaxLength(32)
+      } yield RequestCommonForSubscription(
+        regime = "MDR",
+        receiptDate = receiptDate,
+        acknowledgementReference = acknowledgementRef,
+        originatingSystem = "MDTP",
+        None
+      )
+    }
+
+  implicit val arbitraryIndividualDetails: Arbitrary[IndividualDetails] =
+    Arbitrary {
+      for {
+        firstName <- arbitrary[String]
+        middleName <- Gen.option(arbitrary[String])
+        lastName <- arbitrary[String]
+      } yield IndividualDetails(
+        firstName = firstName,
+        middleName = middleName,
+        lastName = lastName
+      )
+    }
+
+  implicit val arbitraryOrganisationDetails: Arbitrary[OrganisationDetails] =
+    Arbitrary {
+      for {
+        name <- arbitrary[String]
+      } yield OrganisationDetails(organisationName = name)
+    }
+
+  implicit val arbitraryContactInformationForIndividual
+      : Arbitrary[ContactInformationForIndividual] = Arbitrary {
+    for {
+      individual <- arbitrary[IndividualDetails]
+      email <- arbitrary[String]
+      phone <- Gen.option(arbitrary[String])
+      mobile <- Gen.option(arbitrary[String])
+    } yield ContactInformationForIndividual(
+      individual,
+      email,
+      phone,
+      mobile
+    )
+  }
+
+  implicit val arbitraryContactInformationForOrganisation
+      : Arbitrary[ContactInformationForOrganisation] = Arbitrary {
+    for {
+      organisation <- arbitrary[OrganisationDetails]
+      email <- arbitrary[String]
+      phone <- Gen.option(arbitrary[String])
+      mobile <- Gen.option(arbitrary[String])
+    } yield ContactInformationForOrganisation(
+      organisation,
+      email,
+      phone,
+      mobile
+    )
+  }
+
+  implicit val arbitraryPrimaryContact: Arbitrary[PrimaryContact] = Arbitrary {
+    for {
+      contactInformation <- Gen.oneOf(
+        arbitrary[ContactInformationForIndividual],
+        arbitrary[ContactInformationForIndividual]
+      )
+    } yield PrimaryContact(contactInformation)
+  }
+
+  implicit val arbitrarySecondaryContact: Arbitrary[SecondaryContact] =
+    Arbitrary {
+      for {
+        contactInformation <- Gen.oneOf(
+          arbitrary[ContactInformationForIndividual],
+          arbitrary[ContactInformationForIndividual]
+        )
+      } yield SecondaryContact(contactInformation)
+    }
+
+  implicit val arbitraryRequestDetail: Arbitrary[RequestDetail] = Arbitrary {
+    for {
+      idType <- arbitrary[String]
+      idNumber <- arbitrary[String]
+      tradingName <- Gen.option(arbitrary[String])
+      isGBUser <- arbitrary[Boolean]
+      primaryContact <- arbitrary[PrimaryContact]
+      secondaryContact <- Gen.option(arbitrary[SecondaryContact])
+    } yield RequestDetail(
+      IDType = idType,
+      IDNumber = idNumber,
+      tradingName = tradingName,
+      isGBUser = isGBUser,
+      primaryContact = primaryContact,
+      secondaryContact = secondaryContact
+    )
+  }
+
+  implicit val arbitraryCreateSubscriptionForMDRRequest
+      : Arbitrary[CreateSubscriptionForMDRRequest] =
+    Arbitrary {
+      for {
+        requestCommon <- arbitrary[RequestCommonForSubscription]
+        requestDetail <- arbitrary[RequestDetail]
+      } yield CreateSubscriptionForMDRRequest(
+        SubscriptionForMDRRequest(requestCommon, requestDetail)
+      )
+    }
+
 }

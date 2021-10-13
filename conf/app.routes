@@ -8,3 +8,4 @@ POST    /registration/organisation/utr         uk.gov.hmrc.registerforexchangeof
 POST    /registration/individual/noId          uk.gov.hmrc.registerforexchangeofinformation.controllers.RegistrationController.withoutID
 POST    /registration/organisation/noId        uk.gov.hmrc.registerforexchangeofinformation.controllers.RegistrationController.withoutOrgID
 
+POST    /subscription/create-subscription      uk.gov.hmrc.registerforexchangeofinformation.controllers.SubscriptionController.createSubscription
