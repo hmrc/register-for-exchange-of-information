@@ -32,7 +32,10 @@ import uk.gov.hmrc.registerforexchangeofinformation.base.{
   WireMockServerHandler
 }
 import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
-import uk.gov.hmrc.registerforexchangeofinformation.models.CreateSubscriptionForMDRRequest
+import uk.gov.hmrc.registerforexchangeofinformation.models.{
+  CreateSubscriptionForMDRRequest,
+  DisplaySubscriptionForMDRRequest
+}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -45,7 +48,7 @@ class SubscriptionConnectorSpec
   override lazy val app: Application = applicationBuilder()
     .configure(
       conf = "microservice.services.create-subscription.port" -> server.port(),
-      "microservice.services.create-subscription.port" -> server.port()
+      "microservice.services.read-subscription.port" -> server.port()
     )
     .build()
 
@@ -78,6 +81,34 @@ class SubscriptionConnectorSpec
             )
 
             val result = connector.sendSubscriptionInformation(sub)
+            result.futureValue.status mustBe errorCode
+        }
+      }
+    }
+
+    "read subscription" - {
+      "must return status as OK for read Subscription" in {
+        stubResponse(
+          "/mdr/dct04/v1",
+          OK
+        )
+
+        forAll(arbitrary[DisplaySubscriptionForMDRRequest]) { sub =>
+          val result = connector.readSubscriptionInformation(sub)
+          result.futureValue.status mustBe OK
+        }
+      }
+
+      "must return an error status for  invalid read Subscription" in {
+
+        forAll(arbitrary[DisplaySubscriptionForMDRRequest], errorCodes) {
+          (sub, errorCode) =>
+            stubResponse(
+              "/mdr/dct04/v1",
+              errorCode
+            )
+
+            val result = connector.readSubscriptionInformation(sub)
             result.futureValue.status mustBe errorCode
         }
       }
