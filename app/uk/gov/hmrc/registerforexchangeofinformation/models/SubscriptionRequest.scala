@@ -199,6 +199,7 @@ object RequestParameters {
 
 case class RequestCommonForSubscription(
     regime: String,
+    conversationID: Option[String] = None,
     receiptDate: String,
     acknowledgementReference: String,
     originatingSystem: String,
@@ -211,18 +212,18 @@ object RequestCommonForSubscription {
     Json.format[RequestCommonForSubscription]
 }
 
-case class SubscriptionForMDRRequest(
+case class SubscriptionRequest(
     requestCommon: RequestCommonForSubscription,
     requestDetail: RequestDetail
 )
 
-object SubscriptionForMDRRequest {
-  implicit val format: OFormat[SubscriptionForMDRRequest] =
-    Json.format[SubscriptionForMDRRequest]
+object SubscriptionRequest {
+  implicit val format: OFormat[SubscriptionRequest] =
+    Json.format[SubscriptionRequest]
 }
 
 case class CreateSubscriptionForMDRRequest(
-    createSubscriptionForMDRRequest: SubscriptionForMDRRequest
+    createSubscriptionForMDRRequest: SubscriptionRequest
 )
 
 object CreateSubscriptionForMDRRequest {

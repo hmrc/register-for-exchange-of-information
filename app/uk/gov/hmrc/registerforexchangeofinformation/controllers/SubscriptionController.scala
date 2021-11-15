@@ -27,6 +27,7 @@ import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
 import uk.gov.hmrc.registerforexchangeofinformation.connectors.SubscriptionConnector
 import uk.gov.hmrc.registerforexchangeofinformation.models.{
   CreateSubscriptionForMDRRequest,
+  DisplaySubscriptionForMDRRequest,
   ErrorDetails
 }
 
@@ -57,6 +58,23 @@ class SubscriptionController @Inject() (
         valid = sub =>
           for {
             response <- subscriptionConnector.sendSubscriptionInformation(sub)
+          } yield convertToResult(response)
+      )
+  }
+
+  def readSubscription: Action[JsValue] = authenticate(parse.json).async {
+    implicit request =>
+      val subscriptionReadResult: JsResult[DisplaySubscriptionForMDRRequest] =
+        request.body.validate[DisplaySubscriptionForMDRRequest]
+
+      subscriptionReadResult.fold(
+        invalid = _ =>
+          Future.successful(
+            BadRequest("DisplaySubscriptionForMDRRequest is invalid")
+          ),
+        valid = sub =>
+          for {
+            response <- subscriptionConnector.readSubscriptionInformation(sub)
           } yield convertToResult(response)
       )
   }

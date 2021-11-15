@@ -36,6 +36,7 @@ import uk.gov.hmrc.registerforexchangeofinformation.connectors.SubscriptionConne
 import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
 import uk.gov.hmrc.registerforexchangeofinformation.models.{
   CreateSubscriptionForMDRRequest,
+  DisplaySubscriptionForMDRRequest,
   ErrorDetail,
   ErrorDetails,
   SourceFaultDetail
@@ -61,6 +62,7 @@ class SubscriptionControllerSpec
     .build()
 
   "SubscriptionController" - {
+
     "should return OK when subscriptionForMDRRequest is valid" in {
       when(
         mockSubscriptionConnector
@@ -87,6 +89,34 @@ class SubscriptionControllerSpec
           status(result) mustEqual OK
       }
     }
+
+    "should return OK when ReadSubscriptionForMDRRequest is valid" in {
+      when(
+        mockSubscriptionConnector
+          .readSubscriptionInformation(any[DisplaySubscriptionForMDRRequest]())(
+            any[HeaderCarrier](),
+            any[ExecutionContext]()
+          )
+      ).thenReturn(
+        Future.successful(
+          HttpResponse(200, Json.obj(), Map.empty[String, Seq[String]])
+        )
+      )
+
+      forAll(arbitrary[DisplaySubscriptionForMDRRequest]) {
+        readSubscriptionForMDRRequest =>
+          val request =
+            FakeRequest(
+              POST,
+              routes.SubscriptionController.readSubscription().url
+            )
+              .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
+
+          val result = route(application, request).value
+          status(result) mustEqual OK
+      }
+    }
+
     "should return BAD_REQUEST when subscriptionForMDRRequest ia invalid" in {
       when(
         mockSubscriptionConnector
@@ -105,6 +135,31 @@ class SubscriptionControllerSpec
         FakeRequest(
           POST,
           routes.SubscriptionController.createSubscription().url
+        )
+          .withJsonBody(Json.parse("""{"value": "field"}"""))
+
+      val result = route(application, request).value
+      status(result) mustEqual BAD_REQUEST
+    }
+
+    "should return BAD_REQUEST when DisplaySubscriptionForMDRRequest ia invalid" in {
+      when(
+        mockSubscriptionConnector
+          .readSubscriptionInformation(any[DisplaySubscriptionForMDRRequest]())(
+            any[HeaderCarrier](),
+            any[ExecutionContext]()
+          )
+      )
+        .thenReturn(
+          Future.successful(
+            HttpResponse(400, Json.obj(), Map.empty[String, Seq[String]])
+          )
+        )
+
+      val request =
+        FakeRequest(
+          POST,
+          routes.SubscriptionController.readSubscription().url
         )
           .withJsonBody(Json.parse("""{"value": "field"}"""))
 
@@ -168,6 +223,62 @@ class SubscriptionControllerSpec
       }
     }
 
+    "should return FORBIDDEN when authorisation is invalid for read Subscription" in {
+      when(
+        mockSubscriptionConnector
+          .readSubscriptionInformation(any[DisplaySubscriptionForMDRRequest]())(
+            any[HeaderCarrier](),
+            any[ExecutionContext]()
+          )
+      )
+        .thenReturn(
+          Future.successful(
+            HttpResponse(403, Json.obj(), Map.empty[String, Seq[String]])
+          )
+        )
+
+      forAll(arbitrary[DisplaySubscriptionForMDRRequest]) {
+        readSubscriptionForMDRRequest =>
+          val request =
+            FakeRequest(
+              POST,
+              routes.SubscriptionController.readSubscription().url
+            )
+              .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
+
+          val result = route(application, request).value
+          status(result) mustEqual FORBIDDEN
+      }
+    }
+
+    "should return SERVICE_UNAVAILABLE when EIS becomes unavailable for read Subscription" in {
+      when(
+        mockSubscriptionConnector
+          .readSubscriptionInformation(any[DisplaySubscriptionForMDRRequest]())(
+            any[HeaderCarrier](),
+            any[ExecutionContext]()
+          )
+      )
+        .thenReturn(
+          Future.successful(
+            HttpResponse(503, Json.obj(), Map.empty[String, Seq[String]])
+          )
+        )
+
+      forAll(arbitrary[DisplaySubscriptionForMDRRequest]) {
+        readSubscriptionForMDRRequest =>
+          val request =
+            FakeRequest(
+              POST,
+              routes.SubscriptionController.readSubscription().url
+            )
+              .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
+
+          val result = route(application, request).value
+          status(result) mustEqual SERVICE_UNAVAILABLE
+      }
+    }
+
     "should return SERVICE_UNAVAILABLE when EIS becomes unavailable" in {
       when(
         mockSubscriptionConnector
@@ -222,6 +333,37 @@ class SubscriptionControllerSpec
               routes.SubscriptionController.createSubscription().url
             )
               .withJsonBody(Json.toJson(subscriptionForMDRRequest))
+
+          val result = route(application, request).value
+          status(result) mustEqual INTERNAL_SERVER_ERROR
+      }
+    }
+    "should return INTERNAL_SERVER_ERROR when EIS fails for readSubscription" in {
+      when(
+        mockSubscriptionConnector
+          .readSubscriptionInformation(any[DisplaySubscriptionForMDRRequest]())(
+            any[HeaderCarrier](),
+            any[ExecutionContext]()
+          )
+      )
+        .thenReturn(
+          Future.successful(
+            HttpResponse(
+              BAD_GATEWAY,
+              Json.obj(),
+              Map.empty[String, Seq[String]]
+            )
+          )
+        )
+
+      forAll(arbitrary[DisplaySubscriptionForMDRRequest]) {
+        readSubscriptionForMDRRequest =>
+          val request =
+            FakeRequest(
+              POST,
+              routes.SubscriptionController.readSubscription().url
+            )
+              .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
 
           val result = route(application, request).value
           status(result) mustEqual INTERNAL_SERVER_ERROR
@@ -298,6 +440,34 @@ class SubscriptionControllerSpec
       }
     }
 
+    "should return NOT_FOUND for unspecified errors for read Subscription" in {
+      when(
+        mockSubscriptionConnector
+          .readSubscriptionInformation(any[DisplaySubscriptionForMDRRequest]())(
+            any[HeaderCarrier](),
+            any[ExecutionContext]()
+          )
+      )
+        .thenReturn(
+          Future.successful(
+            HttpResponse(404, Json.obj(), Map.empty[String, Seq[String]])
+          )
+        )
+
+      forAll(arbitrary[DisplaySubscriptionForMDRRequest]) {
+        readSubscriptionForMDRRequest =>
+          val request =
+            FakeRequest(
+              POST,
+              routes.SubscriptionController.readSubscription().url
+            )
+              .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
+
+          val result = route(application, request).value
+          status(result) mustEqual NOT_FOUND
+      }
+    }
+
     "downstream errors should be recoverable when not in json" in {
       when(
         mockSubscriptionConnector
@@ -325,5 +495,34 @@ class SubscriptionControllerSpec
           status(result) mustEqual SERVICE_UNAVAILABLE
       }
     }
+
+    "downstream errors should be recoverable when not in json for read subscription" in {
+      when(
+        mockSubscriptionConnector
+          .readSubscriptionInformation(any[DisplaySubscriptionForMDRRequest]())(
+            any[HeaderCarrier](),
+            any[ExecutionContext]()
+          )
+      )
+        .thenReturn(
+          Future.successful(
+            HttpResponse(503, "Not Available", Map.empty[String, Seq[String]])
+          )
+        )
+
+      forAll(arbitrary[DisplaySubscriptionForMDRRequest]) {
+        readSubscriptionForMDRRequest =>
+          val request =
+            FakeRequest(
+              POST,
+              routes.SubscriptionController.readSubscription().url
+            )
+              .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
+
+          val result = route(application, request).value
+          status(result) mustEqual SERVICE_UNAVAILABLE
+      }
+    }
+
   }
 }

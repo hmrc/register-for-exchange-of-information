@@ -19,7 +19,10 @@ package uk.gov.hmrc.registerforexchangeofinformation.connectors
 import com.google.inject.Inject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
-import uk.gov.hmrc.registerforexchangeofinformation.models.CreateSubscriptionForMDRRequest
+import uk.gov.hmrc.registerforexchangeofinformation.models.{
+  CreateSubscriptionForMDRRequest,
+  DisplaySubscriptionForMDRRequest
+}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,4 +47,19 @@ class SubscriptionConnector @Inject() (
     )
   }
 
+  def readSubscriptionInformation(
+      subscription: DisplaySubscriptionForMDRRequest
+  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    val serviceName = "read-subscription"
+    http.POST[DisplaySubscriptionForMDRRequest, HttpResponse](
+      config.baseUrl(serviceName),
+      subscription,
+      headers = extraHeaders(config, serviceName)
+    )(
+      wts = DisplaySubscriptionForMDRRequest.format,
+      rds = httpReads,
+      hc = hc,
+      ec = ec
+    )
+  }
 }

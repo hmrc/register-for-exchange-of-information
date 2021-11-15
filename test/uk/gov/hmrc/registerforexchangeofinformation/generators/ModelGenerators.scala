@@ -191,6 +191,7 @@ trait ModelGenerators {
         acknowledgementRef <- stringsWithMaxLength(32)
       } yield RequestCommonForSubscription(
         regime = "MDR",
+        conversationID = None,
         receiptDate = receiptDate,
         acknowledgementReference = acknowledgementRef,
         originatingSystem = "MDTP",
@@ -292,8 +293,29 @@ trait ModelGenerators {
         requestCommon <- arbitrary[RequestCommonForSubscription]
         requestDetail <- arbitrary[RequestDetail]
       } yield CreateSubscriptionForMDRRequest(
-        SubscriptionForMDRRequest(requestCommon, requestDetail)
+        SubscriptionRequest(requestCommon, requestDetail)
       )
     }
 
+  implicit val arbitraryReadSubscriptionRequestDetail
+      : Arbitrary[ReadSubscriptionRequestDetail] = Arbitrary {
+    for {
+      idType <- arbitrary[String]
+      idNumber <- arbitrary[String]
+    } yield ReadSubscriptionRequestDetail(
+      IDType = idType,
+      IDNumber = idNumber
+    )
+  }
+
+  implicit val arbitraryReadSubscriptionForMDRRequest
+      : Arbitrary[DisplaySubscriptionForMDRRequest] =
+    Arbitrary {
+      for {
+        requestCommon <- arbitrary[RequestCommonForSubscription]
+        requestDetail <- arbitrary[ReadSubscriptionRequestDetail]
+      } yield DisplaySubscriptionForMDRRequest(
+        DisplaySubscriptionDetails(requestCommon, requestDetail)
+      )
+    }
 }
