@@ -61,7 +61,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithoutId]) { sub =>
           stubResponse(
-            "/register-without-id/v1",
+            "/mdr/dct70a/v1",
             OK
           )
 
@@ -74,7 +74,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithoutId]) { sub =>
           stubResponse(
-            "/register-without-id/v1",
+            "/mdr/dct70a/v1",
             BAD_REQUEST
           )
 
@@ -87,7 +87,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithoutId]) { sub =>
           stubResponse(
-            "/register-without-id/v1",
+            "/mdr/dct70a/v1",
             INTERNAL_SERVER_ERROR
           )
 
