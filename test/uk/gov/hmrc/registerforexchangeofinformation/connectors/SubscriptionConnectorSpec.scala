@@ -61,7 +61,7 @@ class SubscriptionConnectorSpec
     "create subscription" - {
       "must return status as OK for submission of Subscription" in {
         stubResponse(
-          "/mdr/dct03/v1",
+          "/mdr/dct70c/v1",
           OK
         )
 
@@ -76,7 +76,7 @@ class SubscriptionConnectorSpec
         forAll(arbitrary[CreateSubscriptionForMDRRequest], errorCodes) {
           (sub, errorCode) =>
             stubResponse(
-              "/mdr/dct03/v1",
+              "/mdr/dct70c/v1",
               errorCode
             )
 
