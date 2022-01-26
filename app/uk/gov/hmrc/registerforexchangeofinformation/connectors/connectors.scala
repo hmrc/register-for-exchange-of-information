@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 HM Revenue & Customs
+ * Copyright 2022 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,9 +78,10 @@ package object connectors {
       "x-forwarded-host" -> "mdtp",
       "date" -> ZonedDateTime.now().format(formatter),
       "x-correlation-id" -> {
-        headerCarrier.requestId
+        /*headerCarrier.requestId
           .map(_.value)
-          .getOrElse(UUID.randomUUID().toString)
+          .getOrElse(UUID.randomUUID().toString)*/ //TODO need to investigate why the requestId value length is 56
+        UUID.randomUUID().toString
       },
       "x-conversation-id" -> {
         headerCarrier.sessionId
