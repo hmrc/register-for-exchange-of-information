@@ -41,8 +41,7 @@ class AuthActionImpl @Inject() (
       request: Request[A],
       block: Request[A] => Future[Result]
   ): Future[Result] = {
-    implicit val hc: HeaderCarrier =
-      HeaderCarrierConverter.fromRequest(request)
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequest(request)
 
     authorised() {
       block(request)

@@ -78,9 +78,10 @@ package object connectors {
       "x-forwarded-host" -> "mdtp",
       "date" -> ZonedDateTime.now().format(formatter),
       "x-correlation-id" -> {
-        headerCarrier.requestId
+        /*headerCarrier.requestId
           .map(_.value)
-          .getOrElse(UUID.randomUUID().toString)
+          .getOrElse(UUID.randomUUID().toString)*/ //TODO need to investigate why the requestId value length is 56
+        UUID.randomUUID().toString
       },
       "x-conversation-id" -> {
         headerCarrier.sessionId
