@@ -9,4 +9,4 @@ POST    /registration/individual/noId          uk.gov.hmrc.registerforexchangeof
 POST    /registration/organisation/noId        uk.gov.hmrc.registerforexchangeofinformation.controllers.RegistrationController.withoutOrgID
 
 POST    /subscription/create-subscription      uk.gov.hmrc.registerforexchangeofinformation.controllers.SubscriptionController.createSubscription
-POST    /subscription/read-subscription      uk.gov.hmrc.registerforexchangeofinformation.controllers.SubscriptionController.readSubscription
+POST    /subscription/read-subscription        uk.gov.hmrc.registerforexchangeofinformation.controllers.SubscriptionController.readSubscription
