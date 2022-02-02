@@ -41,7 +41,7 @@ case class WithIDIndividual(
     firstName: String,
     middleName: Option[String],
     lastName: String,
-    dateOfBirth: String
+    dateOfBirth: Option[String]
 ) extends PartnerDetails
 
 object WithIDIndividual {

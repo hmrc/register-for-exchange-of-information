@@ -169,7 +169,7 @@ trait ModelGenerators {
         firstName <- arbitrary[String]
         middleName <- Gen.option(arbitrary[String])
         lastName <- arbitrary[String]
-        dateOfBirth <- arbitrary[String]
+        dateOfBirth <- Gen.option(arbitrary[String])
       } yield WithIDIndividual(firstName, middleName, lastName, dateOfBirth)
     }
 
