@@ -374,7 +374,7 @@ class SubscriptionControllerSpec
       val errorDetails = ErrorDetails(
         ErrorDetail(
           DateTime.now().toString,
-          "xx",
+          Some("xx"),
           "409",
           "CONFLICT",
           "",
