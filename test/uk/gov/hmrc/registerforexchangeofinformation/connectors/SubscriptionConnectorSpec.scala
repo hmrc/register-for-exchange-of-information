@@ -61,7 +61,7 @@ class SubscriptionConnectorSpec
     "create subscription" - {
       "must return status as OK for submission of Subscription" in {
         stubResponse(
-          "/mdr/dct70c/v1",
+          "/dac6/dct70c/v1",
           OK
         )
 
@@ -76,7 +76,7 @@ class SubscriptionConnectorSpec
         forAll(arbitrary[CreateSubscriptionForMDRRequest], errorCodes) {
           (sub, errorCode) =>
             stubResponse(
-              "/mdr/dct70c/v1",
+              "/dac6/dct70c/v1",
               errorCode
             )
 
@@ -89,7 +89,7 @@ class SubscriptionConnectorSpec
     "read subscription" - {
       "must return status as OK for read Subscription" in {
         stubResponse(
-          "/mdr/dct70d/v1",
+          "/dac6/dct70d/v1",
           OK
         )
 
@@ -104,7 +104,7 @@ class SubscriptionConnectorSpec
         forAll(arbitrary[DisplaySubscriptionForMDRRequest], errorCodes) {
           (sub, errorCode) =>
             stubResponse(
-              "/mdr/dct70d/v1",
+              "/dac6/dct70d/v1",
               errorCode
             )
 

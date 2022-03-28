@@ -61,7 +61,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithoutId]) { sub =>
           stubResponse(
-            "/mdr/dct70a/v1",
+            "/dac6/dct70a/v1",
             OK
           )
 
@@ -74,7 +74,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithoutId]) { sub =>
           stubResponse(
-            "/mdr/dct70a/v1",
+            "/dac6/dct70a/v1",
             BAD_REQUEST
           )
 
@@ -87,7 +87,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithoutId]) { sub =>
           stubResponse(
-            "/mdr/dct70a/v1",
+            "/dac6/dct70a/v1",
             INTERNAL_SERVER_ERROR
           )
 
@@ -102,7 +102,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
-            "/mdr/dct70b/v1",
+            "/dac6/dct70b/v1",
             OK
           )
 
@@ -115,7 +115,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
-            "/mdr/dct70b/v1",
+            "/dac6/dct70b/v1",
             BAD_REQUEST
           )
 
@@ -128,7 +128,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
-            "/mdr/dct70b/v1",
+            "/dac6/dct70b/v1",
             INTERNAL_SERVER_ERROR
           )
 
