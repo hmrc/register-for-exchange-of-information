@@ -28,7 +28,7 @@ This service runs on port 10016 and is named REGISTER_FOR_EXCHANGE_OF_INFORMATIO
 
 Run the following command to start services locally:
 
-    sm --start MDR_ALL -f
+    sm --start MDR_ALL -r
 
 #### *Acceptance test repo*:  
 [register-for-exchange-of-information-ui-tests](https://github.com/hmrc/register-for-exchange-of-information-ui-tests)
