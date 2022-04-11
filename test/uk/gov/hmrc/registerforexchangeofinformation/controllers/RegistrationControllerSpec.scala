@@ -60,14 +60,14 @@ class RegistrationControllerSpec
     .build()
 
   val allRoutesWithID = Gen.oneOf(
-    s"${routes.RegistrationController.withUTR().url}",
-    s"${routes.RegistrationController.withNino().url}",
-    s"${routes.RegistrationController.withOrgUTR().url}"
+    s"${routes.RegistrationController.withUTR.url}",
+    s"${routes.RegistrationController.withNino.url}",
+    s"${routes.RegistrationController.withOrgUTR.url}"
   )
 
   val allRoutesWithoutID: Gen[String] = Gen.oneOf(
-    s"${routes.RegistrationController.withoutOrgID().url}",
-    s"${routes.RegistrationController.withoutID().url}"
+    s"${routes.RegistrationController.withoutOrgID.url}",
+    s"${routes.RegistrationController.withoutID.url}"
   )
 
   "Registration Controller" - {

@@ -81,7 +81,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.createSubscription().url
+              routes.SubscriptionController.createSubscription.url
             )
               .withJsonBody(Json.toJson(subscriptionForMDRRequest))
 
@@ -108,7 +108,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.readSubscription().url
+              routes.SubscriptionController.readSubscription.url
             )
               .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
 
@@ -134,7 +134,7 @@ class SubscriptionControllerSpec
       val request =
         FakeRequest(
           POST,
-          routes.SubscriptionController.createSubscription().url
+          routes.SubscriptionController.createSubscription.url
         )
           .withJsonBody(Json.parse("""{"value": "field"}"""))
 
@@ -159,7 +159,7 @@ class SubscriptionControllerSpec
       val request =
         FakeRequest(
           POST,
-          routes.SubscriptionController.readSubscription().url
+          routes.SubscriptionController.readSubscription.url
         )
           .withJsonBody(Json.parse("""{"value": "field"}"""))
 
@@ -186,7 +186,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.createSubscription().url
+              routes.SubscriptionController.createSubscription.url
             )
               .withJsonBody(Json.toJson(subscriptionForMDRRequest))
 
@@ -214,7 +214,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.createSubscription().url
+              routes.SubscriptionController.createSubscription.url
             )
               .withJsonBody(Json.toJson(subscriptionForMDRRequest))
 
@@ -242,7 +242,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.readSubscription().url
+              routes.SubscriptionController.readSubscription.url
             )
               .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
 
@@ -270,7 +270,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.readSubscription().url
+              routes.SubscriptionController.readSubscription.url
             )
               .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
 
@@ -298,7 +298,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.createSubscription().url
+              routes.SubscriptionController.createSubscription.url
             )
               .withJsonBody(Json.toJson(subscriptionForMDRRequest))
 
@@ -330,7 +330,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.createSubscription().url
+              routes.SubscriptionController.createSubscription.url
             )
               .withJsonBody(Json.toJson(subscriptionForMDRRequest))
 
@@ -361,7 +361,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.readSubscription().url
+              routes.SubscriptionController.readSubscription.url
             )
               .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
 
@@ -403,7 +403,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.createSubscription().url
+              routes.SubscriptionController.createSubscription.url
             )
               .withJsonBody(Json.toJson(subscriptionForMDRRequest))
 
@@ -431,7 +431,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.createSubscription().url
+              routes.SubscriptionController.createSubscription.url
             )
               .withJsonBody(Json.toJson(subscriptionForMDRRequest))
 
@@ -459,7 +459,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.readSubscription().url
+              routes.SubscriptionController.readSubscription.url
             )
               .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
 
@@ -487,7 +487,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.createSubscription().url
+              routes.SubscriptionController.createSubscription.url
             )
               .withJsonBody(Json.toJson(subscriptionForMDRRequest))
 
@@ -515,7 +515,7 @@ class SubscriptionControllerSpec
           val request =
             FakeRequest(
               POST,
-              routes.SubscriptionController.readSubscription().url
+              routes.SubscriptionController.readSubscription.url
             )
               .withJsonBody(Json.toJson(readSubscriptionForMDRRequest))
 
