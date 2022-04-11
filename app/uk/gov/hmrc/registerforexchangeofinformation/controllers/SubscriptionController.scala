@@ -34,7 +34,6 @@ import uk.gov.hmrc.registerforexchangeofinformation.models.{
 import uk.gov.hmrc.registerforexchangeofinformation.services.AuditService
 
 import scala.concurrent.{ExecutionContext, Future}
-import scala.util.{Success, Try}
 
 class SubscriptionController @Inject() (
     val config: AppConfig,
@@ -43,9 +42,8 @@ class SubscriptionController @Inject() (
     auditService: AuditService,
     override val controllerComponents: ControllerComponents
 )(implicit executionContext: ExecutionContext)
-    extends BackendController(controllerComponents) {
-
-  private val logger: Logger = Logger(this.getClass)
+    extends BackendController(controllerComponents)
+    with Logging {
 
   def createSubscription: Action[JsValue] = authenticate(parse.json).async {
     implicit request =>
@@ -69,7 +67,7 @@ class SubscriptionController @Inject() (
                 )
               )
             )
-          } yield convertToResult(response)
+          } yield response.convertToResult(implicitly[Logger](logger))
       )
   }
 
@@ -86,45 +84,7 @@ class SubscriptionController @Inject() (
         valid = sub =>
           for {
             response <- subscriptionConnector.readSubscriptionInformation(sub)
-          } yield convertToResult(response)
+          } yield response.convertToResult(implicitly[Logger](logger))
       )
-  }
-
-  private def convertToResult(httpResponse: HttpResponse): Result =
-    httpResponse.status match {
-      case OK        => Ok(httpResponse.body)
-      case NOT_FOUND => NotFound(httpResponse.body)
-      case BAD_REQUEST =>
-        logDownStreamError(httpResponse.body)
-        BadRequest(httpResponse.body)
-
-      case FORBIDDEN =>
-        logDownStreamError(httpResponse.body)
-        Forbidden(httpResponse.body)
-
-      case SERVICE_UNAVAILABLE =>
-        logDownStreamError(httpResponse.body)
-        ServiceUnavailable(httpResponse.body)
-
-      case CONFLICT =>
-        logDownStreamError(httpResponse.body)
-        Conflict(httpResponse.body)
-
-      case _ =>
-        logDownStreamError(httpResponse.body)
-        InternalServerError(httpResponse.body)
-
-    }
-
-  private def logDownStreamError(body: String): Unit = {
-    val error = Try(Json.parse(body).validate[ErrorDetails])
-    error match {
-      case Success(JsSuccess(value, _)) =>
-        logger.error(
-          s"Error with submission: ${value.errorDetail.sourceFaultDetail.map(_.detail.mkString)}"
-        )
-      case _ =>
-        logger.error("Error with submission but return is not a valid json")
-    }
   }
 }

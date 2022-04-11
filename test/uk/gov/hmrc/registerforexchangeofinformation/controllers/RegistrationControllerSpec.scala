@@ -362,7 +362,7 @@ class RegistrationControllerSpec
         )
           .thenReturn(
             Future.successful(
-              HttpResponse(503, "Not Available", Map.empty[String, Seq[String]])
+              HttpResponse(500, Json.obj(), Map.empty[String, Seq[String]])
             )
           )
 
