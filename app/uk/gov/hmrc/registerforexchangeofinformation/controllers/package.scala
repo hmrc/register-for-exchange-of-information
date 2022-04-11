@@ -20,7 +20,15 @@ import play.api.Logger
 import play.api.http.Status._
 import play.api.libs.json.{JsSuccess, Json}
 import play.api.mvc.Result
-import play.api.mvc.Results.{BadRequest, Conflict, Forbidden, InternalServerError, NotFound, Ok, ServiceUnavailable}
+import play.api.mvc.Results.{
+  BadRequest,
+  Conflict,
+  Forbidden,
+  InternalServerError,
+  NotFound,
+  Ok,
+  ServiceUnavailable
+}
 import uk.gov.hmrc.http.HttpResponse
 import uk.gov.hmrc.registerforexchangeofinformation.models.ErrorDetails
 
