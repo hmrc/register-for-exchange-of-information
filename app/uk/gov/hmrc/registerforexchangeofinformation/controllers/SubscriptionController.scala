@@ -25,11 +25,13 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.registerforexchangeofinformation.auth.AuthAction
 import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
 import uk.gov.hmrc.registerforexchangeofinformation.connectors.SubscriptionConnector
+import uk.gov.hmrc.registerforexchangeofinformation.models.audit.SubscriptionAudit
 import uk.gov.hmrc.registerforexchangeofinformation.models.{
   CreateSubscriptionForMDRRequest,
   DisplaySubscriptionForMDRRequest,
   ErrorDetails
 }
+import uk.gov.hmrc.registerforexchangeofinformation.services.AuditService
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Success, Try}
@@ -38,6 +40,7 @@ class SubscriptionController @Inject() (
     val config: AppConfig,
     authenticate: AuthAction,
     subscriptionConnector: SubscriptionConnector,
+    auditService: AuditService,
     override val controllerComponents: ControllerComponents
 )(implicit executionContext: ExecutionContext)
     extends BackendController(controllerComponents) {
@@ -58,6 +61,14 @@ class SubscriptionController @Inject() (
         valid = sub =>
           for {
             response <- subscriptionConnector.sendSubscriptionInformation(sub)
+            _ <- auditService.sendAuditEvent(
+              "MDRSubscription",
+              Json.toJson(
+                SubscriptionAudit.fromRequestDetail(
+                  sub.createSubscriptionForMDRRequest.requestDetail
+                )
+              )
+            )
           } yield convertToResult(response)
       )
   }

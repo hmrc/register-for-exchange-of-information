@@ -26,6 +26,8 @@ class AppConfig @Inject() (
     servicesConfig: ServicesConfig
 ) {
 
+  lazy val appName: String = config.get[String]("appName")
+
   val authBaseUrl: String = servicesConfig.baseUrl("auth")
 
   val auditingEnabled: Boolean = config.get[Boolean]("auditing.enabled")
