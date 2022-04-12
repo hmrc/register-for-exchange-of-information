@@ -18,7 +18,7 @@ package uk.gov.hmrc.registerforexchangeofinformation.services
 
 import org.mockito.ArgumentMatchers.any
 import org.scalatest.BeforeAndAfterEach
-import play.api.Application
+import play.api.{Application, Logger}
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsObject, Json}
@@ -31,17 +31,22 @@ import uk.gov.hmrc.play.audit.http.connector.AuditResult.{
 }
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
 import uk.gov.hmrc.registerforexchangeofinformation.base.SpecBase
+import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuditServiceSpec extends SpecBase with BeforeAndAfterEach {
 
   val mockAuditConnector: AuditConnector = mock[AuditConnector]
+  val mockLogger: Logger = mock[Logger]
+  val mockAppConfig: AppConfig = mock[AppConfig]
   val eventDetail: JsObject = Json.obj("test-param1" -> "test-value-1")
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .overrides(
-      bind[AuditConnector].toInstance(mockAuditConnector)
+      bind[AuditConnector].toInstance(mockAuditConnector),
+      bind[Logger].toInstance(mockLogger),
+      bind[AppConfig].toInstance(mockAppConfig)
     )
     .build()
 
@@ -49,10 +54,16 @@ class AuditServiceSpec extends SpecBase with BeforeAndAfterEach {
     reset(mockAuditConnector)
   }
 
-  val auditService: AuditService = injector.instanceOf[AuditService]
+  val auditService: AuditService =
+    new AuditService(mockAppConfig, mockAuditConnector) {
+      override val logger: Logger = mockLogger
+    }
 
   "AuditService must" - {
     "call the audit connector and sendExtendedEvent when it is Success" in {
+
+      when(mockLogger.isDebugEnabled).thenReturn(true)
+
       when(
         mockAuditConnector.sendExtendedEvent(any[ExtendedDataEvent]())(
           any[HeaderCarrier](),
@@ -72,6 +83,10 @@ class AuditServiceSpec extends SpecBase with BeforeAndAfterEach {
           any[HeaderCarrier](),
           any[ExecutionContext]()
         )
+
+      verify(mockLogger, times(1)).debug(
+        s"Audit event dummy app issued successful."
+      )
     }
 
     "call the audit connector and sendExtendedEvent when it is Failure" in {
