@@ -17,23 +17,26 @@
 package uk.gov.hmrc.registerforexchangeofinformation.auth
 
 import akka.util.Timeout
+import org.mockito.ArgumentMatchers.any
 import org.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status.{OK, UNAUTHORIZED}
 import play.api.inject.bind
-import org.mockito.ArgumentMatchers.any
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.{Action, AnyContent, InjectedController}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.status
 import play.api.{Application, Configuration}
+import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.Retrieval
-import uk.gov.hmrc.auth.core.{AuthConnector, MissingBearerToken}
+import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
+import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.http.HeaderCarrier
-import scala.concurrent.{ExecutionContext, Future}
+import uk.gov.hmrc.registerforexchangeofinformation.auth.RetrievalOps._
+
 import scala.concurrent.duration._
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 
 class AuthActionSpec
@@ -46,6 +49,7 @@ class AuthActionSpec
       Ok
     }
   }
+  type AuthRetrievals = Option[AffinityGroup] ~ Option[CredentialRole]
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
@@ -63,6 +67,7 @@ class AuthActionSpec
   "Auth Action" when {
     "the user is not logged in" must {
       "must return unauthorised" in {
+
         when(
           mockAuthConnector.authorise(any[Predicate](), any[Retrieval[_]]())(
             any[HeaderCarrier](),
@@ -80,13 +85,34 @@ class AuthActionSpec
     }
 
     "the user is logged in" must {
-      "must return the request" in {
+      "must return the UNAUTHORIZED request" in {
+        val retrieval: AuthRetrievals = Some(Agent) ~ Some(User)
         when(
-          mockAuthConnector.authorise(any[Predicate](), any[Retrieval[Any]]())(
-            any[HeaderCarrier](),
-            any[ExecutionContext]()
-          )
-        ).thenReturn(Future.successful(()))
+          mockAuthConnector
+            .authorise[AuthRetrievals](
+              any[Predicate](),
+              any[Retrieval[AuthRetrievals]]()
+            )(any[HeaderCarrier](), any[ExecutionContext]())
+        ) thenReturn Future.successful(retrieval)
+
+        val authAction = application.injector.instanceOf[AuthAction]
+        val controller = new Harness(authAction)
+
+        val result = controller.onPageLoad()(FakeRequest("", ""))
+        status(result) mustBe UNAUTHORIZED
+      }
+    }
+
+    "the user is logged in" must {
+      "must return the request" in {
+        val retrieval: AuthRetrievals = Some(Organisation) ~ Some(User)
+        when(
+          mockAuthConnector
+            .authorise[AuthRetrievals](
+              any[Predicate](),
+              any[Retrieval[AuthRetrievals]]()
+            )(any[HeaderCarrier](), any[ExecutionContext]())
+        ) thenReturn Future.successful(retrieval)
 
         val authAction = application.injector.instanceOf[AuthAction]
         val controller = new Harness(authAction)
