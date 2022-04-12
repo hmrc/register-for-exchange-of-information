@@ -28,7 +28,7 @@ import play.api.mvc.{Action, AnyContent, InjectedController}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.status
 import play.api.{Application, Configuration}
-import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
+import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 import uk.gov.hmrc.auth.core._
@@ -100,6 +100,25 @@ class AuthActionSpec
 
         val result = controller.onPageLoad()(FakeRequest("", ""))
         status(result) mustBe UNAUTHORIZED
+      }
+    }
+
+    "the user is logged in as Individual" must {
+      "must return the request" in {
+        val retrieval: AuthRetrievals = Some(Individual) ~ Some(User)
+        when(
+          mockAuthConnector
+            .authorise[AuthRetrievals](
+              any[Predicate](),
+              any[Retrieval[AuthRetrievals]]()
+            )(any[HeaderCarrier](), any[ExecutionContext]())
+        ) thenReturn Future.successful(retrieval)
+
+        val authAction = application.injector.instanceOf[AuthAction]
+        val controller = new Harness(authAction)
+
+        val result = controller.onPageLoad()(FakeRequest("", ""))
+        status(result) mustBe OK
       }
     }
 
