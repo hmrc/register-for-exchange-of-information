@@ -17,10 +17,9 @@
 package uk.gov.hmrc.registerforexchangeofinformation.controllers
 
 import com.google.inject.Inject
-import play.api.Logger
-import play.api.libs.json.{JsResult, JsSuccess, JsValue, Json}
-import play.api.mvc.{Action, ControllerComponents, Result}
-import uk.gov.hmrc.http.HttpResponse
+import play.api.libs.json.{JsResult, JsValue, Json}
+import play.api.mvc.{Action, ControllerComponents}
+import play.api.{Logger, Logging}
 import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.registerforexchangeofinformation.auth.AuthAction
 import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
@@ -28,8 +27,7 @@ import uk.gov.hmrc.registerforexchangeofinformation.connectors.SubscriptionConne
 import uk.gov.hmrc.registerforexchangeofinformation.models.audit.SubscriptionAudit
 import uk.gov.hmrc.registerforexchangeofinformation.models.{
   CreateSubscriptionForMDRRequest,
-  DisplaySubscriptionForMDRRequest,
-  ErrorDetails
+  DisplaySubscriptionForMDRRequest
 }
 import uk.gov.hmrc.registerforexchangeofinformation.services.AuditService
 
