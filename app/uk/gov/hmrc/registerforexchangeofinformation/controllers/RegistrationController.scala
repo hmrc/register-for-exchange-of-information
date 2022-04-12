@@ -41,11 +41,6 @@ class RegistrationController @Inject() (
     extends BackendController(controllerComponents)
     with Logging {
 
-  def noIdRegistration: Action[JsValue] = authenticate.async(parse.json) {
-    implicit request =>
-      withoutIDRegistration(request)
-  }
-
   private def withoutIDRegistration(
       request: Request[JsValue]
   )(implicit hc: HeaderCarrier): Future[Result] = {
