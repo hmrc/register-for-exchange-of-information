@@ -120,11 +120,11 @@ class SubscriptionController @Inject() (
     val error = Try(Json.parse(body).validate[ErrorDetails])
     error match {
       case Success(JsSuccess(value, _)) =>
-        logger.error(
+        logger.warn(
           s"Error with submission: ${value.errorDetail.sourceFaultDetail.map(_.detail.mkString)}"
         )
       case _ =>
-        logger.error("Error with submission but return is not a valid json")
+        logger.warn("Error with submission but return is not a valid json")
     }
   }
 }
