@@ -19,16 +19,14 @@ package uk.gov.hmrc.registerforexchangeofinformation.controllers
 import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.any
 import org.scalacheck.Arbitrary.arbitrary
-import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
 import play.api.inject.bind
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.audit.http.connector.AuditResult
 import uk.gov.hmrc.registerforexchangeofinformation.auth.{
   AuthAction,
   FakeAuthAction
@@ -36,40 +34,32 @@ import uk.gov.hmrc.registerforexchangeofinformation.auth.{
 import uk.gov.hmrc.registerforexchangeofinformation.base.SpecBase
 import uk.gov.hmrc.registerforexchangeofinformation.connectors.SubscriptionConnector
 import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
-import uk.gov.hmrc.registerforexchangeofinformation.models._
-import uk.gov.hmrc.registerforexchangeofinformation.services.AuditService
+import uk.gov.hmrc.registerforexchangeofinformation.models.{
+  CreateSubscriptionForMDRRequest,
+  DisplaySubscriptionForMDRRequest,
+  ErrorDetail,
+  ErrorDetails,
+  SourceFaultDetail
+}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class SubscriptionControllerSpec
     extends SpecBase
     with Generators
-    with ScalaCheckPropertyChecks
-    with BeforeAndAfterEach {
+    with ScalaCheckPropertyChecks {
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
-  val mockAuditService: AuditService = mock[AuditService]
 
   val mockSubscriptionConnector: SubscriptionConnector =
     mock[SubscriptionConnector]
-
   val application: Application = applicationBuilder()
     .overrides(
       bind[SubscriptionConnector].toInstance(mockSubscriptionConnector),
       bind[AuthConnector].toInstance(mockAuthConnector),
-      bind[AuthAction].to[FakeAuthAction],
-      bind[AuditService].toInstance(mockAuditService)
+      bind[AuthAction].to[FakeAuthAction]
     )
     .build()
-
-  override def beforeEach: Unit = {
-    reset(
-      mockSubscriptionConnector,
-      mockAuthConnector,
-      mockSubscriptionConnector,
-      mockAuditService
-    )
-  }
 
   "SubscriptionController" - {
 
@@ -85,13 +75,6 @@ class SubscriptionControllerSpec
           HttpResponse(200, Json.obj(), Map.empty[String, Seq[String]])
         )
       )
-
-      when(
-        mockAuditService.sendAuditEvent(any[String](), any[JsValue]())(
-          any[HeaderCarrier]()
-        )
-      )
-        .thenReturn(Future.successful(AuditResult.Success))
 
       forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
         subscriptionForMDRRequest =>
@@ -148,13 +131,6 @@ class SubscriptionControllerSpec
           )
         )
 
-      when(
-        mockAuditService.sendAuditEvent(any[String](), any[JsValue]())(
-          any[HeaderCarrier]()
-        )
-      )
-        .thenReturn(Future.successful(AuditResult.Success))
-
       val request =
         FakeRequest(
           POST,
@@ -205,13 +181,6 @@ class SubscriptionControllerSpec
           )
         )
 
-      when(
-        mockAuditService.sendAuditEvent(any[String](), any[JsValue]())(
-          any[HeaderCarrier]()
-        )
-      )
-        .thenReturn(Future.successful(AuditResult.Success))
-
       forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
         subscriptionForMDRRequest =>
           val request =
@@ -240,13 +209,6 @@ class SubscriptionControllerSpec
           )
         )
 
-      when(
-        mockAuditService.sendAuditEvent(any[String](), any[JsValue]())(
-          any[HeaderCarrier]()
-        )
-      )
-        .thenReturn(Future.successful(AuditResult.Success))
-
       forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
         subscriptionForMDRRequest =>
           val request =
@@ -274,13 +236,6 @@ class SubscriptionControllerSpec
             HttpResponse(403, Json.obj(), Map.empty[String, Seq[String]])
           )
         )
-
-      when(
-        mockAuditService.sendAuditEvent(any[String](), any[JsValue]())(
-          any[HeaderCarrier]()
-        )
-      )
-        .thenReturn(Future.successful(AuditResult.Success))
 
       forAll(arbitrary[DisplaySubscriptionForMDRRequest]) {
         readSubscriptionForMDRRequest =>
@@ -338,13 +293,6 @@ class SubscriptionControllerSpec
           )
         )
 
-      when(
-        mockAuditService.sendAuditEvent(any[String](), any[JsValue]())(
-          any[HeaderCarrier]()
-        )
-      )
-        .thenReturn(Future.successful(AuditResult.Success))
-
       forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
         subscriptionForMDRRequest =>
           val request =
@@ -376,13 +324,6 @@ class SubscriptionControllerSpec
             )
           )
         )
-
-      when(
-        mockAuditService.sendAuditEvent(any[String](), any[JsValue]())(
-          any[HeaderCarrier]()
-        )
-      )
-        .thenReturn(Future.successful(AuditResult.Success))
 
       forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
         subscriptionForMDRRequest =>
@@ -457,13 +398,6 @@ class SubscriptionControllerSpec
           )
         )
 
-      when(
-        mockAuditService.sendAuditEvent(any[String](), any[JsValue]())(
-          any[HeaderCarrier]()
-        )
-      )
-        .thenReturn(Future.successful(AuditResult.Success))
-
       forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
         subscriptionForMDRRequest =>
           val request =
@@ -491,13 +425,6 @@ class SubscriptionControllerSpec
             HttpResponse(404, Json.obj(), Map.empty[String, Seq[String]])
           )
         )
-
-      when(
-        mockAuditService.sendAuditEvent(any[String](), any[JsValue]())(
-          any[HeaderCarrier]()
-        )
-      )
-        .thenReturn(Future.successful(AuditResult.Success))
 
       forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
         subscriptionForMDRRequest =>
@@ -554,13 +481,6 @@ class SubscriptionControllerSpec
             HttpResponse(503, "Not Available", Map.empty[String, Seq[String]])
           )
         )
-
-      when(
-        mockAuditService.sendAuditEvent(any[String](), any[JsValue]())(
-          any[HeaderCarrier]()
-        )
-      )
-        .thenReturn(Future.successful(AuditResult.Success))
 
       forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
         subscriptionForMDRRequest =>
