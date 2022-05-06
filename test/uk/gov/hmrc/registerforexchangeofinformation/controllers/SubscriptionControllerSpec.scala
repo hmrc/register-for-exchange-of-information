@@ -34,8 +34,9 @@ import uk.gov.hmrc.registerforexchangeofinformation.auth.{
 import uk.gov.hmrc.registerforexchangeofinformation.base.SpecBase
 import uk.gov.hmrc.registerforexchangeofinformation.connectors.SubscriptionConnector
 import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
+import uk.gov.hmrc.registerforexchangeofinformation.models.subscription.request.CreateSubscriptionForMDRRequest
+import uk.gov.hmrc.registerforexchangeofinformation.models.subscription.request.CreateSubscriptionRequest
 import uk.gov.hmrc.registerforexchangeofinformation.models.{
-  CreateSubscriptionForMDRRequest,
   DisplaySubscriptionForMDRRequest,
   ErrorDetail,
   ErrorDetails,
@@ -66,7 +67,7 @@ class SubscriptionControllerSpec
     "should return OK when subscriptionForMDRRequest is valid" in {
       when(
         mockSubscriptionConnector
-          .sendSubscriptionInformation(any[CreateSubscriptionForMDRRequest]())(
+          .sendSubscriptionInformation(any[CreateSubscriptionRequest]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -76,17 +77,16 @@ class SubscriptionControllerSpec
         )
       )
 
-      forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
-        subscriptionForMDRRequest =>
-          val request =
-            FakeRequest(
-              POST,
-              routes.SubscriptionController.createSubscription.url
-            )
-              .withJsonBody(Json.toJson(subscriptionForMDRRequest))
+      forAll(arbitrary[CreateSubscriptionRequest]) { subscriptionRequest =>
+        val request =
+          FakeRequest(
+            POST,
+            routes.SubscriptionController.createSubscription.url
+          )
+            .withJsonBody(Json.toJson(subscriptionRequest))
 
-          val result = route(application, request).value
-          status(result) mustEqual OK
+        val result = route(application, request).value
+        status(result) mustEqual OK
       }
     }
 
@@ -198,7 +198,7 @@ class SubscriptionControllerSpec
     "should return FORBIDDEN when authorisation is invalid" in {
       when(
         mockSubscriptionConnector
-          .sendSubscriptionInformation(any[CreateSubscriptionForMDRRequest]())(
+          .sendSubscriptionInformation(any[CreateSubscriptionRequest]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -209,7 +209,7 @@ class SubscriptionControllerSpec
           )
         )
 
-      forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
+      forAll(arbitrary[CreateSubscriptionRequest]) {
         subscriptionForMDRRequest =>
           val request =
             FakeRequest(
@@ -282,7 +282,7 @@ class SubscriptionControllerSpec
     "should return SERVICE_UNAVAILABLE when EIS becomes unavailable" in {
       when(
         mockSubscriptionConnector
-          .sendSubscriptionInformation(any[CreateSubscriptionForMDRRequest]())(
+          .sendSubscriptionInformation(any[CreateSubscriptionRequest]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -293,7 +293,7 @@ class SubscriptionControllerSpec
           )
         )
 
-      forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
+      forAll(arbitrary[CreateSubscriptionRequest]) {
         subscriptionForMDRRequest =>
           val request =
             FakeRequest(
@@ -310,7 +310,7 @@ class SubscriptionControllerSpec
     "should return INTERNAL_SERVER_ERROR when EIS fails" in {
       when(
         mockSubscriptionConnector
-          .sendSubscriptionInformation(any[CreateSubscriptionForMDRRequest]())(
+          .sendSubscriptionInformation(any[CreateSubscriptionRequest]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -325,7 +325,7 @@ class SubscriptionControllerSpec
           )
         )
 
-      forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
+      forAll(arbitrary[CreateSubscriptionRequest]) {
         subscriptionForMDRRequest =>
           val request =
             FakeRequest(
@@ -383,7 +383,7 @@ class SubscriptionControllerSpec
       )
       when(
         mockSubscriptionConnector
-          .sendSubscriptionInformation(any[CreateSubscriptionForMDRRequest]())(
+          .sendSubscriptionInformation(any[CreateSubscriptionRequest]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -398,7 +398,7 @@ class SubscriptionControllerSpec
           )
         )
 
-      forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
+      forAll(arbitrary[CreateSubscriptionRequest]) {
         subscriptionForMDRRequest =>
           val request =
             FakeRequest(
@@ -415,7 +415,7 @@ class SubscriptionControllerSpec
     "should return NOT_FOUND for unspecified errors" in {
       when(
         mockSubscriptionConnector
-          .sendSubscriptionInformation(any[CreateSubscriptionForMDRRequest]())(
+          .sendSubscriptionInformation(any[CreateSubscriptionRequest]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -426,7 +426,7 @@ class SubscriptionControllerSpec
           )
         )
 
-      forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
+      forAll(arbitrary[CreateSubscriptionRequest]) {
         subscriptionForMDRRequest =>
           val request =
             FakeRequest(
@@ -471,7 +471,7 @@ class SubscriptionControllerSpec
     "downstream errors should be recoverable when not in json" in {
       when(
         mockSubscriptionConnector
-          .sendSubscriptionInformation(any[CreateSubscriptionForMDRRequest]())(
+          .sendSubscriptionInformation(any[CreateSubscriptionRequest]())(
             any[HeaderCarrier](),
             any[ExecutionContext]()
           )
@@ -482,7 +482,7 @@ class SubscriptionControllerSpec
           )
         )
 
-      forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
+      forAll(arbitrary[CreateSubscriptionRequest]) {
         subscriptionForMDRRequest =>
           val request =
             FakeRequest(

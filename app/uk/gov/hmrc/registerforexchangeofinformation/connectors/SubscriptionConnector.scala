@@ -19,9 +19,11 @@ package uk.gov.hmrc.registerforexchangeofinformation.connectors
 import com.google.inject.Inject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
-import uk.gov.hmrc.registerforexchangeofinformation.models.{
+import uk.gov.hmrc.registerforexchangeofinformation.models.DisplaySubscriptionForMDRRequest
+import uk.gov.hmrc.registerforexchangeofinformation.models.subscription.request.{
+  CreateSubscriptionForCBCRequest,
   CreateSubscriptionForMDRRequest,
-  DisplaySubscriptionForMDRRequest
+  CreateSubscriptionRequest
 }
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -32,19 +34,34 @@ class SubscriptionConnector @Inject() (
 ) {
 
   def sendSubscriptionInformation(
-      subscription: CreateSubscriptionForMDRRequest
+      subscription: CreateSubscriptionRequest
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val serviceName = "create-subscription"
-    http.POST[CreateSubscriptionForMDRRequest, HttpResponse](
-      config.baseUrl(serviceName),
-      subscription,
-      headers = extraHeaders(config, serviceName)
-    )(
-      wts = CreateSubscriptionForMDRRequest.format,
-      rds = httpReads,
-      hc = hc,
-      ec = ec
-    )
+    subscription match {
+      case subs: CreateSubscriptionForMDRRequest =>
+        val serviceName = "create-subscription"
+        http.POST[CreateSubscriptionForMDRRequest, HttpResponse](
+          config.baseUrl(serviceName),
+          subs,
+          headers = extraHeaders(config, serviceName)
+        )(
+          wts = CreateSubscriptionForMDRRequest.format,
+          rds = httpReads,
+          hc = hc,
+          ec = ec
+        )
+      case subs: CreateSubscriptionForCBCRequest =>
+        val serviceName = "create-subscription-cbc"
+        http.POST[CreateSubscriptionForCBCRequest, HttpResponse](
+          config.baseUrl(serviceName),
+          subs,
+          headers = extraHeaders(config, serviceName)
+        )(
+          wts = CreateSubscriptionForCBCRequest.format,
+          rds = httpReads,
+          hc = hc,
+          ec = ec
+        )
+    }
   }
 
   def readSubscriptionInformation(

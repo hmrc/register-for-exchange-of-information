@@ -17,6 +17,7 @@
 package uk.gov.hmrc.registerforexchangeofinformation.models
 
 import play.api.libs.json.{Json, OFormat}
+import uk.gov.hmrc.registerforexchangeofinformation.models.subscription.request.RequestCommonForSubscription
 
 case class ReadSubscriptionRequestDetail(IDType: String, IDNumber: String)
 

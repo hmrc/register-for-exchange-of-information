@@ -21,6 +21,22 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.registerforexchangeofinformation.models._
+import uk.gov.hmrc.registerforexchangeofinformation.models.subscription.common.{
+  ContactInformationForIndividual,
+  ContactInformationForOrganisation,
+  IndividualDetails,
+  OrganisationDetails,
+  PrimaryContact,
+  SecondaryContact
+}
+import uk.gov.hmrc.registerforexchangeofinformation.models.subscription.request.{
+  CreateSubscriptionForCBCRequest,
+  CreateSubscriptionForMDRRequest,
+  CreateSubscriptionRequest,
+  RequestCommonForSubscription,
+  RequestDetail,
+  SubscriptionRequest
+}
 
 trait ModelGenerators {
   self: Generators =>
@@ -286,6 +302,17 @@ trait ModelGenerators {
     )
   }
 
+  implicit val arbitraryCreateSubscriptionRequest
+      : Arbitrary[CreateSubscriptionRequest] =
+    Arbitrary {
+      for {
+        requestCommon <- arbitrary[RequestCommonForSubscription]
+        requestDetail <- arbitrary[RequestDetail]
+      } yield CreateSubscriptionForMDRRequest(
+        SubscriptionRequest(requestCommon, requestDetail)
+      )
+    }
+
   implicit val arbitraryCreateSubscriptionForMDRRequest
       : Arbitrary[CreateSubscriptionForMDRRequest] =
     Arbitrary {
@@ -293,6 +320,17 @@ trait ModelGenerators {
         requestCommon <- arbitrary[RequestCommonForSubscription]
         requestDetail <- arbitrary[RequestDetail]
       } yield CreateSubscriptionForMDRRequest(
+        SubscriptionRequest(requestCommon, requestDetail)
+      )
+    }
+
+  implicit val arbitraryCreateSubscriptionForCBCRequest
+      : Arbitrary[CreateSubscriptionForCBCRequest] =
+    Arbitrary {
+      for {
+        requestCommon <- arbitrary[RequestCommonForSubscription]
+        requestDetail <- arbitrary[RequestDetail]
+      } yield CreateSubscriptionForCBCRequest(
         SubscriptionRequest(requestCommon, requestDetail)
       )
     }
@@ -318,4 +356,5 @@ trait ModelGenerators {
         DisplaySubscriptionDetails(requestCommon, requestDetail)
       )
     }
+
 }
