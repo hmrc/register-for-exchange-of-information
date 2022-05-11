@@ -54,10 +54,10 @@ trait ModelGenerators {
     for {
       receiptDate <- arbitrary[String]
       acknowledgementRef <- stringsWithMaxLength(32)
-
+      regime <- Gen.oneOf("MDR", "CBC")
     } yield RequestCommon(
       receiptDate = receiptDate,
-      regime = "MDR",
+      regime = regime,
       acknowledgementReference = acknowledgementRef,
       None
     )

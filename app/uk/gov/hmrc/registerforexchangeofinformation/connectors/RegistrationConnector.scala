@@ -35,8 +35,11 @@ class RegistrationConnector @Inject() (
       registration: RegisterWithoutId
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val serviceName = "register-without-id"
+
+    val regime =
+      registration.registerWithoutIDRequest.requestCommon.regime.toLowerCase
     http.POST[RegisterWithoutId, HttpResponse](
-      config.baseUrl(serviceName),
+      config.baseUrl(serviceName, regime),
       registration,
       headers = extraHeaders(config, serviceName)
     )(wts = RegisterWithoutId.format, rds = httpReads, hc = hc, ec = ec)

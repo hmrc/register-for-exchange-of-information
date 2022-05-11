@@ -35,6 +35,9 @@ class AppConfig @Inject() (
   def baseUrl(serviceName: String): String =
     s"${servicesConfig.baseUrl(serviceName)}${servicesConfig.getString(s"microservice.services.$serviceName.context")}"
 
+  def baseUrl(serviceName: String, regime: String): String =
+    s"${servicesConfig.baseUrl(serviceName)}${servicesConfig.getString(s"microservice.services.$serviceName.context_$regime")}"
+
   val bearerToken: String => String = (serviceName: String) =>
     config.get[String](s"microservice.services.$serviceName.bearer-token")
   val environment: String => String = (serviceName: String) =>

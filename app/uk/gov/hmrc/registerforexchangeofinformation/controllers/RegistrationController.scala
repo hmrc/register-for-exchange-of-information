@@ -51,7 +51,7 @@ class RegistrationController @Inject() (
 
   private def withoutIDRegistration(
       request: Request[JsValue]
-  )(implicit hc: HeaderCarrier) = {
+  )(implicit hc: HeaderCarrier): Future[Result] = {
     val noIdOrganisationRegistration: JsResult[RegisterWithoutId] =
       request.body.validate[RegisterWithoutId]
 
