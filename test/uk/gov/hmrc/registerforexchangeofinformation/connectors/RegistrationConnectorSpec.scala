@@ -55,16 +55,17 @@ class RegistrationConnectorSpec
   lazy val connector: RegistrationConnector =
     app.injector.instanceOf[RegistrationConnector]
 
-  def getWithoutIdContextPath(sub: RegisterWithoutId): String = {
-    if (sub.registerWithoutIDRequest.requestCommon.regime == "MDR") {
-      "/dac6/dct70a/v1"
-    } else {
-      "/cbc/dct70a/v1"
-    }
-  }
-
   "RegistrationConnector" - {
     "for a registration without id submission" - {
+
+      def getWithoutIdContextPath(sub: RegisterWithoutId): String = {
+        if (sub.registerWithoutIDRequest.requestCommon.regime == "MDR") {
+          "/dac6/dct70a/v1"
+        } else {
+          "/cbc/dct70a/v1"
+        }
+      }
+
       "must return status as OK for submission of Subscription" in {
 
         forAll(arbitrary[RegisterWithoutId]) { sub =>
@@ -106,11 +107,20 @@ class RegistrationConnectorSpec
     }
 
     "for a registration with id submission" - {
+
+      def getWithIdContextPath(sub: RegisterWithID): String = {
+        if (sub.registerWithIDRequest.requestCommon.regime == "MDR") {
+          "/dac6/dct70b/v1"
+        } else {
+          "/cbc/dct70b/v1"
+        }
+      }
+
       "must return status as OK for submission of Subscription" in {
 
         forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
-            "/dac6/dct70b/v1",
+            getWithIdContextPath(sub),
             OK
           )
 
@@ -123,7 +133,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
-            "/dac6/dct70b/v1",
+            getWithIdContextPath(sub),
             BAD_REQUEST
           )
 
@@ -136,7 +146,7 @@ class RegistrationConnectorSpec
 
         forAll(arbitrary[RegisterWithID]) { sub =>
           stubResponse(
-            "/dac6/dct70b/v1",
+            getWithIdContextPath(sub),
             INTERNAL_SERVER_ERROR
           )
 

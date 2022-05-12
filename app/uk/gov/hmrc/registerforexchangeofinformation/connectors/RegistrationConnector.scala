@@ -48,10 +48,12 @@ class RegistrationConnector @Inject() (
   def sendWithID(
       registration: RegisterWithID
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    val regime =
+      registration.registerWithIDRequest.requestCommon.regime.toLowerCase
     val serviceName = "register-with-id"
 
     http.POST[RegisterWithID, HttpResponse](
-      config.baseUrl(serviceName),
+      config.baseUrl(serviceName, regime),
       registration,
       headers = extraHeaders(config, serviceName)
     )(wts = RegisterWithID.format, rds = httpReads, hc = hc, ec = ec)

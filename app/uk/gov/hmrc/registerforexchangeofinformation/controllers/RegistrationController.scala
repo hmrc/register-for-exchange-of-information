@@ -87,9 +87,9 @@ class RegistrationController @Inject() (
       withIdRegistration(request)
   }
 
-  private def withIdRegistration(
+  def withIdRegistration(
       request: Request[JsValue]
-  )(implicit hc: HeaderCarrier) = {
+  )(implicit hc: HeaderCarrier): Future[Result] = {
     val withIDRegistration: JsResult[RegisterWithID] =
       request.body.validate[RegisterWithID]
 
