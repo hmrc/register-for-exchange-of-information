@@ -32,9 +32,10 @@ import uk.gov.hmrc.registerforexchangeofinformation.base.{
   WireMockServerHandler
 }
 import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
-import uk.gov.hmrc.registerforexchangeofinformation.models.{
-  CreateSubscriptionForMDRRequest,
-  DisplaySubscriptionForMDRRequest
+import uk.gov.hmrc.registerforexchangeofinformation.models.DisplaySubscriptionForMDRRequest
+import uk.gov.hmrc.registerforexchangeofinformation.models.subscription.request.{
+  CreateSubscriptionForCBCRequest,
+  CreateSubscriptionForMDRRequest
 }
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -48,6 +49,7 @@ class SubscriptionConnectorSpec
   override lazy val app: Application = applicationBuilder()
     .configure(
       conf = "microservice.services.create-subscription.port" -> server.port(),
+      "microservice.services.create-subscription-cbc.port" -> server.port(),
       "microservice.services.read-subscription.port" -> server.port()
     )
     .build()
@@ -58,7 +60,7 @@ class SubscriptionConnectorSpec
   private val errorCodes: Gen[Int] = Gen.chooseNum(400, 599)
 
   "SubscriptionConnector" - {
-    "create subscription" - {
+    "create subscription MDR" - {
       "must return status as OK for submission of Subscription" in {
         stubResponse(
           "/dac6/dct70c/v1",
@@ -77,6 +79,33 @@ class SubscriptionConnectorSpec
           (sub, errorCode) =>
             stubResponse(
               "/dac6/dct70c/v1",
+              errorCode
+            )
+
+            val result = connector.sendSubscriptionInformation(sub)
+            result.futureValue.status mustBe errorCode
+        }
+      }
+    }
+    "create subscription CBC" - {
+      "must return status as OK for submission of Subscription" in {
+        stubResponse(
+          "/cbc/dct03/v1",
+          OK
+        )
+
+        forAll(arbitrary[CreateSubscriptionForCBCRequest]) { sub =>
+          val result = connector.sendSubscriptionInformation(sub)
+          result.futureValue.status mustBe OK
+        }
+      }
+
+      "must return an error status for submission of invalid subscription Data" in {
+
+        forAll(arbitrary[CreateSubscriptionForCBCRequest], errorCodes) {
+          (sub, errorCode) =>
+            stubResponse(
+              "/cbc/dct03/v1",
               errorCode
             )
 

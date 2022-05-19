@@ -25,14 +25,15 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.registerforexchangeofinformation.auth.AuthAction
 import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
 import uk.gov.hmrc.registerforexchangeofinformation.connectors.SubscriptionConnector
+import uk.gov.hmrc.registerforexchangeofinformation.models.subscription.request.CreateSubscriptionRequest
 import uk.gov.hmrc.registerforexchangeofinformation.models.{
-  CreateSubscriptionForMDRRequest,
   DisplaySubscriptionForMDRRequest,
   ErrorDetails
 }
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Success, Try}
+import uk.gov.hmrc.registerforexchangeofinformation.models.subscription.request.CreateSubscriptionRequest
 
 class SubscriptionController @Inject() (
     val config: AppConfig,
@@ -46,9 +47,8 @@ class SubscriptionController @Inject() (
 
   def createSubscription: Action[JsValue] = authenticate(parse.json).async {
     implicit request =>
-      val subscriptionSubmissionResult
-          : JsResult[CreateSubscriptionForMDRRequest] =
-        request.body.validate[CreateSubscriptionForMDRRequest]
+      val subscriptionSubmissionResult: JsResult[CreateSubscriptionRequest] =
+        request.body.validate[CreateSubscriptionRequest]
 
       subscriptionSubmissionResult.fold(
         invalid = _ =>

@@ -22,23 +22,23 @@ import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.Json
 import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
-import uk.gov.hmrc.registerforexchangeofinformation.models.subscription.request.CreateSubscriptionForMDRRequest
+import uk.gov.hmrc.registerforexchangeofinformation.models.subscription.request.CreateSubscriptionForCBCRequest
 
-class SubscriptionForMDRRequestSpec
+class SubscriptionForCBCRequestSpec
     extends AnyFreeSpec
     with Generators
     with OptionValues
     with Matchers {
 
-  "SubscriptionForMDRRequest" - {
+  "SubscriptionForCBCRequest" - {
     "must serialise and de-serialise as expected" in {
 
-      val requestModel: CreateSubscriptionForMDRRequest =
-        arbitrary[CreateSubscriptionForMDRRequest].sample.value
+      val requestModel: CreateSubscriptionForCBCRequest =
+        arbitrary[CreateSubscriptionForCBCRequest].sample.value
 
       Json
         .toJson(requestModel)
-        .as[CreateSubscriptionForMDRRequest] mustBe requestModel
+        .as[CreateSubscriptionForCBCRequest] mustBe requestModel
 
     }
   }

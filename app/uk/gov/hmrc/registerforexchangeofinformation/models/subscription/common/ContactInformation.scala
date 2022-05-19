@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.registerforexchangeofinformation.models
+package uk.gov.hmrc.registerforexchangeofinformation.models.subscription.common
 
-import play.api.libs.json._
+import play.api.libs.json.{Json, OFormat, OWrites, Reads, __}
 
 sealed trait ContactInformation
 
@@ -174,113 +174,4 @@ object SecondaryContact {
         ) =>
       Json.toJsObject(contactInformationForOrg)
   }
-}
-
-case class RequestDetail(
-    IDType: String,
-    IDNumber: String,
-    tradingName: Option[String],
-    isGBUser: Boolean,
-    primaryContact: PrimaryContact,
-    secondaryContact: Option[SecondaryContact]
-)
-
-object RequestDetail {
-  implicit val requestDetailFormats: OFormat[RequestDetail] =
-    Json.format[RequestDetail]
-}
-
-case class RequestParameters(paramName: String, paramValue: String)
-
-object RequestParameters {
-  implicit val indentifierFormats: OFormat[RequestParameters] =
-    Json.format[RequestParameters]
-}
-
-case class RequestCommonForSubscription(
-    regime: String,
-    conversationID: Option[String] = None,
-    receiptDate: String,
-    acknowledgementReference: String,
-    originatingSystem: String,
-    requestParameters: Option[Seq[RequestParameters]]
-)
-
-object RequestCommonForSubscription {
-  implicit val requestCommonForSubscriptionFormats
-      : OFormat[RequestCommonForSubscription] =
-    Json.format[RequestCommonForSubscription]
-}
-
-case class SubscriptionRequest(
-    requestCommon: RequestCommonForSubscription,
-    requestDetail: RequestDetail
-)
-
-object SubscriptionRequest {
-  implicit val format: OFormat[SubscriptionRequest] =
-    Json.format[SubscriptionRequest]
-}
-
-case class CreateSubscriptionForMDRRequest(
-    createSubscriptionForMDRRequest: SubscriptionRequest
-)
-
-object CreateSubscriptionForMDRRequest {
-  implicit val format: OFormat[CreateSubscriptionForMDRRequest] =
-    Json.format[CreateSubscriptionForMDRRequest]
-}
-
-case class ReturnParameters(paramName: String, paramValue: String)
-
-object ReturnParameters {
-  implicit val format: Format[ReturnParameters] = Json.format[ReturnParameters]
-}
-
-case class ResponseCommon(
-    status: String,
-    statusText: Option[String],
-    processingDate: String,
-    returnParameters: Option[Seq[ReturnParameters]]
-)
-
-object ResponseCommon {
-  implicit val format: Format[ResponseCommon] = Json.format[ResponseCommon]
-}
-
-case class ResponseDetailForMDRSubscription(subscriptionID: String)
-
-object ResponseDetailForMDRSubscription {
-  implicit val format: OFormat[ResponseDetailForMDRSubscription] =
-    Json.format[ResponseDetailForMDRSubscription]
-}
-
-case class SubscriptionForMDRResponse(
-    responseCommon: ResponseCommon,
-    responseDetail: ResponseDetailForMDRSubscription
-)
-
-object SubscriptionForMDRResponse {
-
-  implicit val reads: Reads[SubscriptionForMDRResponse] = {
-    import play.api.libs.functional.syntax._
-    (
-      (__ \ "responseCommon").read[ResponseCommon] and
-        (__ \ "responseDetail").read[ResponseDetailForMDRSubscription]
-    )((responseCommon, responseDetail) =>
-      SubscriptionForMDRResponse(responseCommon, responseDetail)
-    )
-  }
-
-  implicit val writes: OWrites[SubscriptionForMDRResponse] =
-    Json.writes[SubscriptionForMDRResponse]
-}
-
-case class CreateSubscriptionForMDRResponse(
-    createSubscriptionForMDRResponse: SubscriptionForMDRResponse
-)
-
-object CreateSubscriptionForMDRResponse {
-  implicit val format: OFormat[CreateSubscriptionForMDRResponse] =
-    Json.format[CreateSubscriptionForMDRResponse]
 }
