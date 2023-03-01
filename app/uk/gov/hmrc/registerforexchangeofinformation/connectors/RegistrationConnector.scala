@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,20 +19,17 @@ package uk.gov.hmrc.registerforexchangeofinformation.connectors
 import com.google.inject.Inject
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
-import uk.gov.hmrc.registerforexchangeofinformation.models.{
-  RegisterWithID,
-  RegisterWithoutId
-}
+import uk.gov.hmrc.registerforexchangeofinformation.models.{RegisterWithID, RegisterWithoutId}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegistrationConnector @Inject() (
-    val config: AppConfig,
-    val http: HttpClient
+  val config: AppConfig,
+  val http: HttpClient
 ) {
 
   def sendWithoutIDInformation(
-      registration: RegisterWithoutId
+    registration: RegisterWithoutId
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val serviceName = "register-without-id"
     http.POST[RegisterWithoutId, HttpResponse](
@@ -43,7 +40,7 @@ class RegistrationConnector @Inject() (
   }
 
   def sendWithID(
-      registration: RegisterWithID
+    registration: RegisterWithID
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val serviceName = "register-with-id"
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import play.api.test.Helpers.status
 import play.api.{Application, Configuration}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core.authorise.Predicate
-import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
+import uk.gov.hmrc.auth.core.retrieve.{~, Retrieval}
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.registerforexchangeofinformation.auth.RetrievalOps._
@@ -39,14 +39,13 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 
-class AuthActionSpec
-    extends PlaySpec
-    with GuiceOneAppPerSuite
-    with MockitoSugar {
+class AuthActionSpec extends PlaySpec with GuiceOneAppPerSuite with MockitoSugar {
 
   class Harness(authAction: AuthAction) extends InjectedController {
-    def onPageLoad(): Action[AnyContent] = authAction { _ =>
-      Ok
+
+    def onPageLoad(): Action[AnyContent] = authAction {
+      _ =>
+        Ok
     }
   }
   type AuthRetrievals = Option[AffinityGroup] ~ Option[CredentialRole]
@@ -78,7 +77,7 @@ class AuthActionSpec
 
         val authAction = application.injector.instanceOf[AuthAction]
         val controller = new Harness(authAction)
-        val result = controller.onPageLoad()(FakeRequest("", ""))
+        val result     = controller.onPageLoad()(FakeRequest("", ""))
         status(result) mustBe UNAUTHORIZED
 
       }

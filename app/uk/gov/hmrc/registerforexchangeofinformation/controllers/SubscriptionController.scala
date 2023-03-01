@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,20 +25,16 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.registerforexchangeofinformation.auth.AuthAction
 import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
 import uk.gov.hmrc.registerforexchangeofinformation.connectors.SubscriptionConnector
-import uk.gov.hmrc.registerforexchangeofinformation.models.{
-  CreateSubscriptionForMDRRequest,
-  DisplaySubscriptionForMDRRequest,
-  ErrorDetails
-}
+import uk.gov.hmrc.registerforexchangeofinformation.models.{CreateSubscriptionForMDRRequest, DisplaySubscriptionForMDRRequest, ErrorDetails}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Success, Try}
 
 class SubscriptionController @Inject() (
-    val config: AppConfig,
-    authenticate: AuthAction,
-    subscriptionConnector: SubscriptionConnector,
-    override val controllerComponents: ControllerComponents
+  val config: AppConfig,
+  authenticate: AuthAction,
+  subscriptionConnector: SubscriptionConnector,
+  override val controllerComponents: ControllerComponents
 )(implicit executionContext: ExecutionContext)
     extends BackendController(controllerComponents) {
 
@@ -46,8 +42,7 @@ class SubscriptionController @Inject() (
 
   def createSubscription: Action[JsValue] = authenticate(parse.json).async {
     implicit request =>
-      val subscriptionSubmissionResult
-          : JsResult[CreateSubscriptionForMDRRequest] =
+      val subscriptionSubmissionResult: JsResult[CreateSubscriptionForMDRRequest] =
         request.body.validate[CreateSubscriptionForMDRRequest]
 
       subscriptionSubmissionResult.fold(

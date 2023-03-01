@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,18 @@ import play.api.libs.json._
 case class RegisterWithID(registerWithIDRequest: RegisterWithIDRequest)
 
 object RegisterWithID {
+
   implicit val format: Format[RegisterWithID] =
     Json.format[RegisterWithID]
 }
 
 case class RegisterWithIDRequest(
-    requestCommon: RequestCommon,
-    requestDetail: RequestWithIDDetails
+  requestCommon: RequestCommon,
+  requestDetail: RequestWithIDDetails
 )
 
 object RegisterWithIDRequest {
+
   implicit val format: Format[RegisterWithIDRequest] =
     Json.format[RegisterWithIDRequest]
 }
@@ -38,10 +40,10 @@ object RegisterWithIDRequest {
 sealed trait PartnerDetails
 
 case class WithIDIndividual(
-    firstName: String,
-    middleName: Option[String],
-    lastName: String,
-    dateOfBirth: Option[String]
+  firstName: String,
+  middleName: Option[String],
+  lastName: String,
+  dateOfBirth: Option[String]
 ) extends PartnerDetails
 
 object WithIDIndividual {
@@ -49,8 +51,8 @@ object WithIDIndividual {
 }
 
 case class WithIDOrganisation(
-    organisationName: String,
-    organisationType: String
+  organisationName: String,
+  organisationType: String
 ) extends PartnerDetails
 
 object WithIDOrganisation {
@@ -58,11 +60,11 @@ object WithIDOrganisation {
 }
 
 case class RequestWithIDDetails(
-    IDType: String,
-    IDNumber: String,
-    requiresNameMatch: Boolean,
-    isAnAgent: Boolean,
-    partnerDetails: PartnerDetails
+  IDType: String,
+  IDNumber: String,
+  requiresNameMatch: Boolean,
+  isAnAgent: Boolean,
+  partnerDetails: PartnerDetails
 )
 
 object RequestWithIDDetails {
@@ -78,12 +80,12 @@ object RequestWithIDDetails {
         (__ \ "organisation").readNullable[WithIDOrganisation]
     )(
       (
-          idType,
-          idNumber,
-          requiresNameMatch,
-          isAnAgent,
-          individual,
-          organisation
+        idType,
+        idNumber,
+        requiresNameMatch,
+        isAnAgent,
+        individual,
+        organisation
       ) =>
         (individual, organisation) match {
           case (Some(_), Some(_)) =>
@@ -124,11 +126,11 @@ object RequestWithIDDetails {
             individual @ WithIDIndividual(_, _, _, _)
           ) =>
         Json.obj(
-          "IDType" -> idType,
-          "IDNumber" -> idNumber,
+          "IDType"            -> idType,
+          "IDNumber"          -> idNumber,
           "requiresNameMatch" -> requiresNameMatch,
-          "isAnAgent" -> isAnAgent,
-          "individual" -> individual
+          "isAnAgent"         -> isAnAgent,
+          "individual"        -> individual
         )
       case RequestWithIDDetails(
             idType,
@@ -138,11 +140,11 @@ object RequestWithIDDetails {
             organisation @ WithIDOrganisation(_, _)
           ) =>
         Json.obj(
-          "IDType" -> idType,
-          "IDNumber" -> idNumber,
+          "IDType"            -> idType,
+          "IDNumber"          -> idNumber,
           "requiresNameMatch" -> requiresNameMatch,
-          "isAnAgent" -> isAnAgent,
-          "organisation" -> organisation
+          "isAnAgent"         -> isAnAgent,
+          "organisation"      -> organisation
         )
     }
 }

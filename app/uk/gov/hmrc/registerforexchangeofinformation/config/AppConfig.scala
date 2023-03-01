@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,22 +22,21 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
 class AppConfig @Inject() (
-    config: Configuration,
-    servicesConfig: ServicesConfig
+  config: Configuration,
+  servicesConfig: ServicesConfig
 ) {
 
   val authBaseUrl: String = servicesConfig.baseUrl("auth")
 
   val auditingEnabled: Boolean = config.get[Boolean]("auditing.enabled")
+
   val graphiteHost: String =
     config.get[String]("microservice.metrics.graphite.host")
 
   def baseUrl(serviceName: String): String =
     s"${servicesConfig.baseUrl(serviceName)}${servicesConfig.getString(s"microservice.services.$serviceName.context")}"
 
-  val bearerToken: String => String = (serviceName: String) =>
-    config.get[String](s"microservice.services.$serviceName.bearer-token")
-  val environment: String => String = (serviceName: String) =>
-    config.get[String](s"microservice.services.$serviceName.environment")
+  val bearerToken: String => String = (serviceName: String) => config.get[String](s"microservice.services.$serviceName.bearer-token")
+  val environment: String => String = (serviceName: String) => config.get[String](s"microservice.services.$serviceName.environment")
 
 }
