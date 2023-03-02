@@ -33,7 +33,6 @@ lazy val microservice = Project(appName, file("."))
     scalacOptions += "-Wconf:src=routes/.*:s",
     PlayKeys.playDefaultPort := 10016
   )
-  .settings(publishingSettings: _*)
   .settings(ScoverageSettings.settings: _*)
   .configs(IntegrationTest)
   .settings(integrationTestSettings(): _*)

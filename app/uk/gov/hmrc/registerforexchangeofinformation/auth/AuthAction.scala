@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,7 @@ import play.api.mvc.Results.Status
 import play.api.mvc._
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
 import uk.gov.hmrc.auth.core.AuthProvider.GovernmentGateway
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{
-  affinityGroup,
-  credentialRole
-}
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.{affinityGroup, credentialRole}
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -34,25 +31,26 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import scala.concurrent.{ExecutionContext, Future}
 
 class AuthActionImpl @Inject() (
-    override val authConnector: AuthConnector,
-    val parser: BodyParsers.Default
+  override val authConnector: AuthConnector,
+  val parser: BodyParsers.Default
 )(implicit val executionContext: ExecutionContext)
     extends AuthAction
     with AuthorisedFunctions {
 
   override def invokeBlock[A](
-      request: Request[A],
-      block: Request[A] => Future[Result]
+    request: Request[A],
+    block: Request[A] => Future[Result]
   ): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequest(request)
 
     authorised(AuthProviders(GovernmentGateway) and ConfidenceLevel.L50)
       .retrieve(
         affinityGroup and credentialRole
-      ) { case userAffinityGroup ~ userCredentialRole =>
-        if (isPermittedUserType(userAffinityGroup, userCredentialRole)) {
-          block(request)
-        } else Future.successful(Status(UNAUTHORIZED))
+      ) {
+        case userAffinityGroup ~ userCredentialRole =>
+          if (isPermittedUserType(userAffinityGroup, userCredentialRole)) {
+            block(request)
+          } else Future.successful(Status(UNAUTHORIZED))
       }
       .recover {
         case _: NoActiveSession        => Status(UNAUTHORIZED)
@@ -61,17 +59,18 @@ class AuthActionImpl @Inject() (
   }
 
   def isPermittedUserType(
-      affinityGroup: Option[AffinityGroup],
-      credentialRole: Option[CredentialRole]
+    affinityGroup: Option[AffinityGroup],
+    credentialRole: Option[CredentialRole]
   ): Boolean =
     affinityGroup match {
-      case Some(Agent)        => false
-      case Some(Organisation) => credentialRole.fold(false)(cr => cr == User)
-      case _                  => true
+      case Some(Agent) => false
+      case Some(Organisation) =>
+        credentialRole.fold(false)(
+          cr => cr == User
+        )
+      case _ => true
     }
 }
 
 @ImplementedBy(classOf[AuthActionImpl])
-trait AuthAction
-    extends ActionBuilder[Request, AnyContent]
-    with ActionFunction[Request, Request]
+trait AuthAction extends ActionBuilder[Request, AnyContent] with ActionFunction[Request, Request]

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,20 +25,16 @@ import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.registerforexchangeofinformation.auth.AuthAction
 import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
 import uk.gov.hmrc.registerforexchangeofinformation.connectors.RegistrationConnector
-import uk.gov.hmrc.registerforexchangeofinformation.models.{
-  ErrorDetails,
-  RegisterWithID,
-  RegisterWithoutId
-}
+import uk.gov.hmrc.registerforexchangeofinformation.models.{ErrorDetails, RegisterWithID, RegisterWithoutId}
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Success, Try}
 
 class RegistrationController @Inject() (
-    val config: AppConfig,
-    authenticate: AuthAction,
-    registrationConnector: RegistrationConnector,
-    override val controllerComponents: ControllerComponents
+  val config: AppConfig,
+  authenticate: AuthAction,
+  registrationConnector: RegistrationConnector,
+  override val controllerComponents: ControllerComponents
 )(implicit executionContext: ExecutionContext)
     extends BackendController(controllerComponents) {
 
@@ -50,7 +46,7 @@ class RegistrationController @Inject() (
   }
 
   private def withoutIDRegistration(
-      request: Request[JsValue]
+    request: Request[JsValue]
   )(implicit hc: HeaderCarrier) = {
     val noIdOrganisationRegistration: JsResult[RegisterWithoutId] =
       request.body.validate[RegisterWithoutId]
@@ -68,6 +64,7 @@ class RegistrationController @Inject() (
     implicit request =>
       withoutIDRegistration(request)
   }
+
   def withoutOrgID: Action[JsValue] = authenticate(parse.json).async {
     implicit request =>
       withoutIDRegistration(request)
@@ -82,13 +79,14 @@ class RegistrationController @Inject() (
     implicit request =>
       withIdRegistration(request)
   }
+
   def withOrgUTR: Action[JsValue] = authenticate(parse.json).async {
     implicit request =>
       withIdRegistration(request)
   }
 
   private def withIdRegistration(
-      request: Request[JsValue]
+    request: Request[JsValue]
   )(implicit hc: HeaderCarrier) = {
     val withIDRegistration: JsResult[RegisterWithID] =
       request.body.validate[RegisterWithID]

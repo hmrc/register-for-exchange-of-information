@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,41 +23,45 @@ sealed trait ContactInformation
 case class OrganisationDetails(organisationName: String)
 
 object OrganisationDetails {
+
   implicit val format: OFormat[OrganisationDetails] =
     Json.format[OrganisationDetails]
 }
 
 case class IndividualDetails(
-    firstName: String,
-    middleName: Option[String],
-    lastName: String
+  firstName: String,
+  middleName: Option[String],
+  lastName: String
 )
 
 object IndividualDetails {
+
   implicit val format: OFormat[IndividualDetails] =
     Json.format[IndividualDetails]
 }
 
 case class ContactInformationForIndividual(
-    individual: IndividualDetails,
-    email: String,
-    phone: Option[String],
-    mobile: Option[String]
+  individual: IndividualDetails,
+  email: String,
+  phone: Option[String],
+  mobile: Option[String]
 ) extends ContactInformation
 
 object ContactInformationForIndividual {
+
   implicit val format: OFormat[ContactInformationForIndividual] =
     Json.format[ContactInformationForIndividual]
 }
 
 case class ContactInformationForOrganisation(
-    organisation: OrganisationDetails,
-    email: String,
-    phone: Option[String],
-    mobile: Option[String]
+  organisation: OrganisationDetails,
+  email: String,
+  phone: Option[String],
+  mobile: Option[String]
 ) extends ContactInformation
 
 object ContactInformationForOrganisation {
+
   implicit val format: OFormat[ContactInformationForOrganisation] =
     Json.format[ContactInformationForOrganisation]
 }
@@ -74,31 +78,32 @@ object PrimaryContact {
         (__ \ "email").read[String] and
         (__ \ "phone").readNullable[String] and
         (__ \ "mobile").readNullable[String]
-    )((organisation, individual, email, phone, mobile) =>
-      (organisation.isDefined, individual.isDefined) match {
-        case (true, false) =>
-          PrimaryContact(
-            ContactInformationForOrganisation(
-              organisation.get,
-              email,
-              phone,
-              mobile
+    )(
+      (organisation, individual, email, phone, mobile) =>
+        (organisation.isDefined, individual.isDefined) match {
+          case (true, false) =>
+            PrimaryContact(
+              ContactInformationForOrganisation(
+                organisation.get,
+                email,
+                phone,
+                mobile
+              )
             )
-          )
-        case (false, true) =>
-          PrimaryContact(
-            ContactInformationForIndividual(
-              individual.get,
-              email,
-              phone,
-              mobile
+          case (false, true) =>
+            PrimaryContact(
+              ContactInformationForIndividual(
+                individual.get,
+                email,
+                phone,
+                mobile
+              )
             )
-          )
-        case _ =>
-          throw new Exception(
-            "Primary Contact must have either an organisation or individual element"
-          )
-      }
+          case _ =>
+            throw new Exception(
+              "Primary Contact must have either an organisation or individual element"
+            )
+        }
     )
   }
 
@@ -131,31 +136,32 @@ object SecondaryContact {
         (__ \ "email").read[String] and
         (__ \ "phone").readNullable[String] and
         (__ \ "mobile").readNullable[String]
-    )((organisation, individual, email, phone, mobile) =>
-      (organisation.isDefined, individual.isDefined) match {
-        case (true, false) =>
-          SecondaryContact(
-            ContactInformationForOrganisation(
-              organisation.get,
-              email,
-              phone,
-              mobile
+    )(
+      (organisation, individual, email, phone, mobile) =>
+        (organisation.isDefined, individual.isDefined) match {
+          case (true, false) =>
+            SecondaryContact(
+              ContactInformationForOrganisation(
+                organisation.get,
+                email,
+                phone,
+                mobile
+              )
             )
-          )
-        case (false, true) =>
-          SecondaryContact(
-            ContactInformationForIndividual(
-              individual.get,
-              email,
-              phone,
-              mobile
+          case (false, true) =>
+            SecondaryContact(
+              ContactInformationForIndividual(
+                individual.get,
+                email,
+                phone,
+                mobile
+              )
             )
-          )
-        case _ =>
-          throw new Exception(
-            "Secondary Contact must have either an organisation or individual element"
-          )
-      }
+          case _ =>
+            throw new Exception(
+              "Secondary Contact must have either an organisation or individual element"
+            )
+        }
     )
   }
 
@@ -177,15 +183,16 @@ object SecondaryContact {
 }
 
 case class RequestDetail(
-    IDType: String,
-    IDNumber: String,
-    tradingName: Option[String],
-    isGBUser: Boolean,
-    primaryContact: PrimaryContact,
-    secondaryContact: Option[SecondaryContact]
+  IDType: String,
+  IDNumber: String,
+  tradingName: Option[String],
+  isGBUser: Boolean,
+  primaryContact: PrimaryContact,
+  secondaryContact: Option[SecondaryContact]
 )
 
 object RequestDetail {
+
   implicit val requestDetailFormats: OFormat[RequestDetail] =
     Json.format[RequestDetail]
 }
@@ -193,40 +200,43 @@ object RequestDetail {
 case class RequestParameters(paramName: String, paramValue: String)
 
 object RequestParameters {
+
   implicit val indentifierFormats: OFormat[RequestParameters] =
     Json.format[RequestParameters]
 }
 
 case class RequestCommonForSubscription(
-    regime: String,
-    conversationID: Option[String] = None,
-    receiptDate: String,
-    acknowledgementReference: String,
-    originatingSystem: String,
-    requestParameters: Option[Seq[RequestParameters]]
+  regime: String,
+  conversationID: Option[String] = None,
+  receiptDate: String,
+  acknowledgementReference: String,
+  originatingSystem: String,
+  requestParameters: Option[Seq[RequestParameters]]
 )
 
 object RequestCommonForSubscription {
-  implicit val requestCommonForSubscriptionFormats
-      : OFormat[RequestCommonForSubscription] =
+
+  implicit val requestCommonForSubscriptionFormats: OFormat[RequestCommonForSubscription] =
     Json.format[RequestCommonForSubscription]
 }
 
 case class SubscriptionRequest(
-    requestCommon: RequestCommonForSubscription,
-    requestDetail: RequestDetail
+  requestCommon: RequestCommonForSubscription,
+  requestDetail: RequestDetail
 )
 
 object SubscriptionRequest {
+
   implicit val format: OFormat[SubscriptionRequest] =
     Json.format[SubscriptionRequest]
 }
 
 case class CreateSubscriptionForMDRRequest(
-    createSubscriptionForMDRRequest: SubscriptionRequest
+  createSubscriptionForMDRRequest: SubscriptionRequest
 )
 
 object CreateSubscriptionForMDRRequest {
+
   implicit val format: OFormat[CreateSubscriptionForMDRRequest] =
     Json.format[CreateSubscriptionForMDRRequest]
 }
@@ -238,10 +248,10 @@ object ReturnParameters {
 }
 
 case class ResponseCommon(
-    status: String,
-    statusText: Option[String],
-    processingDate: String,
-    returnParameters: Option[Seq[ReturnParameters]]
+  status: String,
+  statusText: Option[String],
+  processingDate: String,
+  returnParameters: Option[Seq[ReturnParameters]]
 )
 
 object ResponseCommon {
@@ -251,13 +261,14 @@ object ResponseCommon {
 case class ResponseDetailForMDRSubscription(subscriptionID: String)
 
 object ResponseDetailForMDRSubscription {
+
   implicit val format: OFormat[ResponseDetailForMDRSubscription] =
     Json.format[ResponseDetailForMDRSubscription]
 }
 
 case class SubscriptionForMDRResponse(
-    responseCommon: ResponseCommon,
-    responseDetail: ResponseDetailForMDRSubscription
+  responseCommon: ResponseCommon,
+  responseDetail: ResponseDetailForMDRSubscription
 )
 
 object SubscriptionForMDRResponse {
@@ -267,8 +278,8 @@ object SubscriptionForMDRResponse {
     (
       (__ \ "responseCommon").read[ResponseCommon] and
         (__ \ "responseDetail").read[ResponseDetailForMDRSubscription]
-    )((responseCommon, responseDetail) =>
-      SubscriptionForMDRResponse(responseCommon, responseDetail)
+    )(
+      (responseCommon, responseDetail) => SubscriptionForMDRResponse(responseCommon, responseDetail)
     )
   }
 
@@ -277,10 +288,11 @@ object SubscriptionForMDRResponse {
 }
 
 case class CreateSubscriptionForMDRResponse(
-    createSubscriptionForMDRResponse: SubscriptionForMDRResponse
+  createSubscriptionForMDRResponse: SubscriptionForMDRResponse
 )
 
 object CreateSubscriptionForMDRResponse {
+
   implicit val format: OFormat[CreateSubscriptionForMDRResponse] =
     Json.format[CreateSubscriptionForMDRResponse]
 }

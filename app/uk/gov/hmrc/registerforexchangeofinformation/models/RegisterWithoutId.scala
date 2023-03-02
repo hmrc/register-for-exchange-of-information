@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ object NoIdIndividual {
   implicit lazy val writes: OWrites[NoIdIndividual] = OWrites[NoIdIndividual] {
     individual =>
       Json.obj(
-        "firstName" -> individual.name.firstName,
-        "lastName" -> individual.name.secondName,
+        "firstName"   -> individual.name.firstName,
+        "lastName"    -> individual.name.secondName,
         "dateOfBirth" -> individual.dateOfBirth.toString
       )
   }
@@ -39,8 +39,8 @@ object NoIdIndividual {
       (__ \ "firstName").read[String] and
         (__ \ "lastName").read[String] and
         (__ \ "dateOfBirth").read[LocalDate]
-    )((firstName, secondName, dob) =>
-      NoIdIndividual(Name(firstName, secondName), dob)
+    )(
+      (firstName, secondName, dob) => NoIdIndividual(Name(firstName, secondName), dob)
     )
   }
 }
@@ -54,12 +54,12 @@ object NoIdOrganisation {
 }
 
 case class Address(
-    addressLine1: String,
-    addressLine2: Option[String],
-    addressLine3: String,
-    addressLine4: Option[String],
-    postalCode: Option[String],
-    countryCode: String
+  addressLine1: String,
+  addressLine2: Option[String],
+  addressLine3: String,
+  addressLine4: Option[String],
+  postalCode: Option[String],
+  countryCode: String
 )
 
 object Address {
@@ -67,10 +67,10 @@ object Address {
 }
 
 case class ContactDetails(
-    phoneNumber: Option[String],
-    mobileNumber: Option[String],
-    faxNumber: Option[String],
-    emailAddress: Option[String]
+  phoneNumber: Option[String],
+  mobileNumber: Option[String],
+  faxNumber: Option[String],
+  emailAddress: Option[String]
 )
 
 object ContactDetails {
@@ -78,9 +78,9 @@ object ContactDetails {
 }
 
 case class Identification(
-    idNumber: String,
-    issuingInstitution: String,
-    issuingCountryCode: String
+  idNumber: String,
+  issuingInstitution: String,
+  issuingCountryCode: String
 )
 
 object Identification {
@@ -94,10 +94,10 @@ object RequestParameter {
 }
 
 case class RequestCommon(
-    receiptDate: String,
-    regime: String,
-    acknowledgementReference: String,
-    requestParameters: Option[Seq[RequestParameter]]
+  receiptDate: String,
+  regime: String,
+  acknowledgementReference: String,
+  requestParameters: Option[Seq[RequestParameter]]
 )
 
 object RequestCommon {
@@ -105,11 +105,11 @@ object RequestCommon {
 }
 
 case class RequestDetails(
-    organisation: Option[NoIdOrganisation],
-    individual: Option[NoIdIndividual],
-    address: Address,
-    contactDetails: ContactDetails,
-    identification: Option[Identification]
+  organisation: Option[NoIdOrganisation],
+  individual: Option[NoIdIndividual],
+  address: Address,
+  contactDetails: ContactDetails,
+  identification: Option[Identification]
 )
 
 object RequestDetails {
@@ -124,32 +124,33 @@ object RequestDetails {
         (__ \ "address").read[Address] and
         (__ \ "contactDetails").read[ContactDetails] and
         (__ \ "identification").readNullable[Identification]
-    )((organisation, individual, address, contactDetails, identification) =>
-      (organisation, individual) match {
-        case (None, None) =>
-          throw new Exception(
-            "Request Details must have either an organisation or individual element"
-          )
-        case (Some(_), Some(_)) =>
-          throw new Exception(
-            "Request details cannot have both and organisation or individual element"
-          )
-        case (organisation, individual) =>
-          RequestDetails(
-            organisation,
-            individual,
-            address,
-            contactDetails,
-            identification
-          )
-      }
+    )(
+      (organisation, individual, address, contactDetails, identification) =>
+        (organisation, individual) match {
+          case (None, None) =>
+            throw new Exception(
+              "Request Details must have either an organisation or individual element"
+            )
+          case (Some(_), Some(_)) =>
+            throw new Exception(
+              "Request details cannot have both and organisation or individual element"
+            )
+          case (organisation, individual) =>
+            RequestDetails(
+              organisation,
+              individual,
+              address,
+              contactDetails,
+              identification
+            )
+        }
     )
   }
 }
 
 case class RegisterWithoutIDRequest(
-    requestCommon: RequestCommon,
-    requestDetail: RequestDetails
+  requestCommon: RequestCommon,
+  requestDetail: RequestDetails
 )
 
 object RegisterWithoutIDRequest {
@@ -157,7 +158,7 @@ object RegisterWithoutIDRequest {
 }
 
 case class RegisterWithoutId(
-    registerWithoutIDRequest: RegisterWithoutIDRequest
+  registerWithoutIDRequest: RegisterWithoutIDRequest
 )
 
 object RegisterWithoutId {

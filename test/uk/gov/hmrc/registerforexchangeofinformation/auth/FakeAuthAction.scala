@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,13 @@ import play.api.mvc.{BodyParsers, Request, Result}
 import scala.concurrent.{ExecutionContext, Future}
 
 class FakeAuthAction @Inject() (
-    val parser: BodyParsers.Default
+  val parser: BodyParsers.Default
 )(implicit val executionContext: ExecutionContext)
     extends AuthAction {
+
   override def invokeBlock[A](
-      request: Request[A],
-      block: Request[A] => Future[Result]
+    request: Request[A],
+    block: Request[A] => Future[Result]
   ): Future[Result] =
     block(request)
 }

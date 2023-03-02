@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core.AuthConnector
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.registerforexchangeofinformation.auth.{
-  AuthAction,
-  FakeAuthAction
-}
+import uk.gov.hmrc.registerforexchangeofinformation.auth.{AuthAction, FakeAuthAction}
 import uk.gov.hmrc.registerforexchangeofinformation.base.SpecBase
 import uk.gov.hmrc.registerforexchangeofinformation.connectors.SubscriptionConnector
 import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
@@ -44,15 +41,13 @@ import uk.gov.hmrc.registerforexchangeofinformation.models.{
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SubscriptionControllerSpec
-    extends SpecBase
-    with Generators
-    with ScalaCheckPropertyChecks {
+class SubscriptionControllerSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
   val mockSubscriptionConnector: SubscriptionConnector =
     mock[SubscriptionConnector]
+
   val application: Application = applicationBuilder()
     .overrides(
       bind[SubscriptionConnector].toInstance(mockSubscriptionConnector),

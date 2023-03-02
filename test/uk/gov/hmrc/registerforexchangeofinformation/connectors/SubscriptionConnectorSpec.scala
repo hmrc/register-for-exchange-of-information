@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,34 +16,20 @@
 
 package uk.gov.hmrc.registerforexchangeofinformation.connectors
 
-import com.github.tomakehurst.wiremock.client.WireMock.{
-  aResponse,
-  post,
-  urlEqualTo
-}
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, post, urlEqualTo}
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
 import play.api.http.Status.OK
-import uk.gov.hmrc.registerforexchangeofinformation.base.{
-  SpecBase,
-  WireMockServerHandler
-}
+import uk.gov.hmrc.registerforexchangeofinformation.base.{SpecBase, WireMockServerHandler}
 import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
-import uk.gov.hmrc.registerforexchangeofinformation.models.{
-  CreateSubscriptionForMDRRequest,
-  DisplaySubscriptionForMDRRequest
-}
+import uk.gov.hmrc.registerforexchangeofinformation.models.{CreateSubscriptionForMDRRequest, DisplaySubscriptionForMDRRequest}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
-class SubscriptionConnectorSpec
-    extends SpecBase
-    with WireMockServerHandler
-    with Generators
-    with ScalaCheckPropertyChecks {
+class SubscriptionConnectorSpec extends SpecBase with WireMockServerHandler with Generators with ScalaCheckPropertyChecks {
 
   override lazy val app: Application = applicationBuilder()
     .configure(
@@ -65,9 +51,10 @@ class SubscriptionConnectorSpec
           OK
         )
 
-        forAll(arbitrary[CreateSubscriptionForMDRRequest]) { sub =>
-          val result = connector.sendSubscriptionInformation(sub)
-          result.futureValue.status mustBe OK
+        forAll(arbitrary[CreateSubscriptionForMDRRequest]) {
+          sub =>
+            val result = connector.sendSubscriptionInformation(sub)
+            result.futureValue.status mustBe OK
         }
       }
 
@@ -93,9 +80,10 @@ class SubscriptionConnectorSpec
           OK
         )
 
-        forAll(arbitrary[DisplaySubscriptionForMDRRequest]) { sub =>
-          val result = connector.readSubscriptionInformation(sub)
-          result.futureValue.status mustBe OK
+        forAll(arbitrary[DisplaySubscriptionForMDRRequest]) {
+          sub =>
+            val result = connector.readSubscriptionInformation(sub)
+            result.futureValue.status mustBe OK
         }
       }
 
@@ -116,8 +104,8 @@ class SubscriptionConnectorSpec
   }
 
   private def stubResponse(
-      expectedUrl: String,
-      expectedStatus: Int
+    expectedUrl: String,
+    expectedStatus: Int
   ): StubMapping =
     server.stubFor(
       post(urlEqualTo(expectedUrl))
