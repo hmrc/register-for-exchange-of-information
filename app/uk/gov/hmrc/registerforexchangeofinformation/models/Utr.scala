@@ -17,7 +17,3 @@
 package uk.gov.hmrc.registerforexchangeofinformation.models
 
 case class Utr(value: String)
-
-object Utr {
-  val regex: String = "^[0-9]{10}$"
-}

@@ -40,11 +40,6 @@ class RegistrationController @Inject() (
 
   private val logger: Logger = Logger(this.getClass)
 
-  def noIdRegistration: Action[JsValue] = authenticate(parse.json).async {
-    implicit request =>
-      withoutIDRegistration(request)
-  }
-
   private def withoutIDRegistration(
     request: Request[JsValue]
   )(implicit hc: HeaderCarrier) = {
