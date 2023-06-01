@@ -30,6 +30,8 @@ import uk.gov.hmrc.registerforexchangeofinformation.models.{CreateSubscriptionFo
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class SubscriptionConnectorSpec extends SpecBase with WireMockServerHandler with Generators with ScalaCheckPropertyChecks {
+  val minT = 400
+  val maxT = 599
 
   override lazy val app: Application = applicationBuilder()
     .configure(
@@ -41,7 +43,7 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockServerHandler with
   lazy val connector: SubscriptionConnector =
     app.injector.instanceOf[SubscriptionConnector]
 
-  private val errorCodes: Gen[Int] = Gen.chooseNum(400, 599)
+  private val errorCodes: Gen[Int] = Gen.chooseNum(minT, maxT)
 
   "SubscriptionConnector" - {
     "create subscription" - {

@@ -24,36 +24,54 @@ import uk.gov.hmrc.registerforexchangeofinformation.models._
 
 trait ModelGenerators {
   self: Generators =>
+  val stringMaxLen = 32
 
   implicit val arbitraryName: Arbitrary[Name] = Arbitrary {
+    val nameMaxLen = 50
+
     for {
-      firstName  <- stringsWithMaxLength(50)
-      secondName <- stringsWithMaxLength(50)
+      firstName  <- stringsWithMaxLength(nameMaxLen)
+      secondName <- stringsWithMaxLength(nameMaxLen)
     } yield Name(firstName, secondName)
   }
 
   implicit val arbitraryNino: Arbitrary[Nino] = Arbitrary {
+    val minNum = 0
+    val maxNum = 999999
+
     for {
       prefix <- Gen.oneOf(Nino.validPrefixes)
-      number <- Gen.choose(0, 999999)
+      number <- Gen.choose(minNum, maxNum)
       suffix <- Gen.oneOf(Nino.validSuffixes)
     } yield Nino(f"$prefix$number%06d$suffix")
   }
 
   implicit val arbitraryUtr: Arbitrary[Utr] = Arbitrary {
+    val minT        = 0
+    val maxT        = 9
+    val givenLength = 10
+
     for {
-      value <- Gen.listOfN(10, Gen.chooseNum(0, 9)).map(_.mkString)
+      value <- Gen.listOfN(givenLength, Gen.chooseNum(minT, maxT)).map(_.mkString)
     } yield Utr(value)
   }
 
   implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] = Arbitrary {
-    datesBetween(LocalDate.of(1900, 1, 1), LocalDate.of(2100, 1, 1))
+    val startYear       = 1900
+    val startMonth      = 1
+    val startDayOfMonth = 1
+    val endYear         = 2100
+    val endMonth        = 1
+    val endDayOfMonth   = 1
+
+    datesBetween(LocalDate.of(startYear, startMonth, startDayOfMonth), LocalDate.of(endYear, endMonth, endDayOfMonth))
   }
 
   implicit val arbitraryRequestCommon: Arbitrary[RequestCommon] = Arbitrary {
+
     for {
       receiptDate        <- arbitrary[String]
-      acknowledgementRef <- stringsWithMaxLength(32)
+      acknowledgementRef <- stringsWithMaxLength(stringMaxLen)
 
     } yield RequestCommon(
       receiptDate = receiptDate,
@@ -186,7 +204,7 @@ trait ModelGenerators {
     Arbitrary {
       for {
         receiptDate        <- arbitrary[String]
-        acknowledgementRef <- stringsWithMaxLength(32)
+        acknowledgementRef <- stringsWithMaxLength(stringMaxLen)
       } yield RequestCommonForSubscription(
         regime = "MDR",
         conversationID = None,
