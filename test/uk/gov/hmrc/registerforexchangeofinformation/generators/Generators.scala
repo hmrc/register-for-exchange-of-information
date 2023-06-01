@@ -26,12 +26,15 @@ import wolfendale.scalacheck.regexp.RegexpGen
 trait Generators extends ModelGenerators {
 
   implicit val dontShrink: Shrink[String] = Shrink.shrinkAny
+  val frequencyVval                       = 1
+  val frequencyNval                       = 10
+  val maxVal                              = 100
 
   def genIntersperseString(
     gen: Gen[String],
     value: String,
-    frequencyV: Int = 1,
-    frequencyN: Int = 10
+    frequencyV: Int = frequencyVval,
+    frequencyN: Int = frequencyNval
   ): Gen[String] = {
 
     val genValue: Gen[Option[String]] =
@@ -101,7 +104,7 @@ trait Generators extends ModelGenerators {
     } yield chars.mkString
 
   def stringsLongerThan(minLength: Int): Gen[String] = for {
-    maxLength <- (minLength * 2).max(100)
+    maxLength <- (minLength * 2).max(maxVal)
     length    <- Gen.chooseNum(minLength + 1, maxLength)
     chars     <- listOfN(length, arbitrary[Char])
   } yield chars.mkString
