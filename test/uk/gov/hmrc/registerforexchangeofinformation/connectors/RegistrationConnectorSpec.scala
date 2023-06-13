@@ -31,7 +31,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 class RegistrationConnectorSpec extends SpecBase with WireMockServerHandler with Generators with ScalaCheckPropertyChecks {
 
-  override lazy val app: Application = new GuiceApplicationBuilder()
+  override lazy val app: Application = applicationBuilder()
     .configure(
       conf = "microservice.services.register-with-id.port" -> server.port(),
       "microservice.services.register-without-id.port" -> server.port()
