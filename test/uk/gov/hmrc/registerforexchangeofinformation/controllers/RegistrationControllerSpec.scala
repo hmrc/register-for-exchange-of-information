@@ -43,7 +43,7 @@ class RegistrationControllerSpec extends SpecBase with Generators with ScalaChec
   val mockRegistrationConnector: RegistrationConnector =
     mock[RegistrationConnector]
 
-  val application: Application = new GuiceApplicationBuilder()
+  val application: Application = applicationBuilder()
     .configure(
       Configuration("metrics.enabled" -> "false", "auditing.enabled" -> false)
     )
