@@ -64,7 +64,7 @@ case class RequestWithIDDetails(
   IDNumber: String,
   requiresNameMatch: Boolean,
   isAnAgent: Boolean,
-  partnerDetails: PartnerDetails
+  partnerDetails: Option[PartnerDetails] = None
 )
 
 object RequestWithIDDetails {
@@ -98,7 +98,7 @@ object RequestWithIDDetails {
               idNumber,
               requiresNameMatch,
               isAnAgent,
-              ind
+              Option(ind)
             )
           case (_, Some(org)) =>
             RequestWithIDDetails(
@@ -106,11 +106,15 @@ object RequestWithIDDetails {
               idNumber,
               requiresNameMatch,
               isAnAgent,
-              org
+              Option(org)
             )
           case (None, None) =>
-            throw new Exception(
-              "Request Details must have either an organisation or individual element"
+            RequestWithIDDetails(
+              idType,
+              idNumber,
+              requiresNameMatch,
+              isAnAgent,
+              partnerDetails = None
             )
         }
     )
@@ -123,7 +127,7 @@ object RequestWithIDDetails {
             idNumber,
             requiresNameMatch,
             isAnAgent,
-            individual @ WithIDIndividual(_, _, _, _)
+            Some(individual @ WithIDIndividual(_, _, _, _))
           ) =>
         Json.obj(
           "IDType"            -> idType,
@@ -137,7 +141,7 @@ object RequestWithIDDetails {
             idNumber,
             requiresNameMatch,
             isAnAgent,
-            organisation @ WithIDOrganisation(_, _)
+            Some(organisation @ WithIDOrganisation(_, _))
           ) =>
         Json.obj(
           "IDType"            -> idType,
@@ -145,6 +149,19 @@ object RequestWithIDDetails {
           "requiresNameMatch" -> requiresNameMatch,
           "isAnAgent"         -> isAnAgent,
           "organisation"      -> organisation
+        )
+      case RequestWithIDDetails(
+            idType,
+            idNumber,
+            requiresNameMatch,
+            isAnAgent,
+            None
+          ) =>
+        Json.obj(
+          "IDType"            -> idType,
+          "IDNumber"          -> idNumber,
+          "requiresNameMatch" -> requiresNameMatch,
+          "isAnAgent"         -> isAnAgent
         )
     }
 }
