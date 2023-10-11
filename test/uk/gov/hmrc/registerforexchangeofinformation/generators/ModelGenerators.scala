@@ -167,9 +167,11 @@ trait ModelGenerators {
         idNumber          <- arbitrary[String]
         requiresNameMatch <- arbitrary[Boolean]
         isAnAgent         <- arbitrary[Boolean]
-        partnerDetails <- Gen.oneOf(
-          arbitrary[WithIDIndividual],
-          arbitrary[WithIDOrganisation]
+        partnerDetails <- Gen.option(
+          Gen.oneOf(
+            arbitrary[WithIDIndividual],
+            arbitrary[WithIDOrganisation]
+          )
         )
       } yield RequestWithIDDetails(
         idType,
