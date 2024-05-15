@@ -1,5 +1,4 @@
 import uk.gov.hmrc.DefaultBuildSettings
-import uk.gov.hmrc.DefaultBuildSettings.{defaultSettings, scalaSettings}
 
 val appName = "register-for-exchange-of-information"
 val silencerVersion = "1.7.16"
@@ -36,12 +35,3 @@ lazy val microservice = Project(appName, file("."))
     PlayKeys.playDefaultPort := 10016
   )
   .settings(ScoverageSettings.settings: _*)
-
-lazy val it = project
-  .enablePlugins(PlayScala)
-  .dependsOn(microservice % "test->test")
-  .settings(DefaultBuildSettings.itSettings)
-  .settings(
-    libraryDependencies ++= AppDependencies.test,
-    resolvers += Resolver.jcenterRepo
-  )
