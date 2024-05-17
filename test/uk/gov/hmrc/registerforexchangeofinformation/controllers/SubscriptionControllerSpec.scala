@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.registerforexchangeofinformation.controllers
 
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 import org.mockito.ArgumentMatchers.any
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -368,7 +368,7 @@ class SubscriptionControllerSpec extends SpecBase with Generators with ScalaChec
     "should return CONFLICT when one occurs" in {
       val errorDetails = ErrorDetails(
         ErrorDetail(
-          DateTime.now().toString,
+          LocalDateTime.now().toString,
           Some("xx"),
           "409",
           "CONFLICT",

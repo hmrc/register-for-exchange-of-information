@@ -16,13 +16,11 @@
 
 package uk.gov.hmrc.registerforexchangeofinformation.controllers
 
-import org.joda.time.DateTime
 import org.mockito.ArgumentMatchers.any
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.inject.bind
-import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{POST, route, status, _}
@@ -35,6 +33,7 @@ import uk.gov.hmrc.registerforexchangeofinformation.connectors.RegistrationConne
 import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
 import uk.gov.hmrc.registerforexchangeofinformation.models._
 
+import java.time.LocalDateTime
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegistrationControllerSpec extends SpecBase with Generators with ScalaCheckPropertyChecks {
@@ -320,7 +319,7 @@ class RegistrationControllerSpec extends SpecBase with Generators with ScalaChec
       "should return forbidden error when authorisation is invalid" in {
         val errorDetails = ErrorDetails(
           ErrorDetail(
-            DateTime.now().toString,
+            LocalDateTime.now().toString,
             Some("xx"),
             "403",
             "FORBIDDEN",

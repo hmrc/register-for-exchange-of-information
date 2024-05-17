@@ -28,13 +28,13 @@ This service runs on port 10016 and is named REGISTER_FOR_EXCHANGE_OF_INFORMATIO
 
 Run the following command to start services locally:
 
-    sm --start MDR_ALL -r
+    sm2 --start MDR_ALL
 
 #### *Acceptance test repo*:  
 [register-for-exchange-of-information-ui-tests](https://github.com/hmrc/register-for-exchange-of-information-ui-tests)
 
 ## Requirements
 
-This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), and requires a Java 8 [JRE] to run.
+This service is written in [Scala](http://www.scala-lang.org/) and [Play](http://playframework.com/), and requires a Java 21 [JRE] to run.
 
 [![Apache-2.0 license](http://img.shields.io/badge/license-Apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)

@@ -22,7 +22,6 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import play.api.Application
 import play.api.http.Status._
-import play.api.inject.guice.GuiceApplicationBuilder
 import uk.gov.hmrc.registerforexchangeofinformation.base.{SpecBase, WireMockServerHandler}
 import uk.gov.hmrc.registerforexchangeofinformation.generators.Generators
 import uk.gov.hmrc.registerforexchangeofinformation.models.{RegisterWithID, RegisterWithoutId}
