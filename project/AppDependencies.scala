@@ -18,9 +18,7 @@ object AppDependencies {
     "org.scalatestplus"       %% "scalatestplus-scalacheck"   % "3.1.0.0-RC2" % Test,
     "wolfendale"              %% "scalacheck-gen-regexp"      % "0.1.2" % Test,
     "org.jsoup"                % "jsoup"                      % "1.17.2" % Test,
-    "org.scalatest"           %% "scalatest"                  % "3.2.18" % Test,
-    "org.scalatestplus.play"  %% "scalatestplus-play"         % "7.0.1" % Test,
-    "com.vladsch.flexmark"     % "flexmark-all"               % "0.64.8" % Test
+    "org.scalatestplus.play"  %% "scalatestplus-play"         % "7.0.1" % Test
   )
 
 }

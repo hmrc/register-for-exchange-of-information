@@ -1,4 +1,3 @@
-import uk.gov.hmrc.DefaultBuildSettings
 
 val appName = "register-for-exchange-of-information"
 val silencerVersion = "1.7.16"
