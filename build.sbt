@@ -3,7 +3,7 @@ val appName = "register-for-exchange-of-information"
 val silencerVersion = "1.7.16"
 
 ThisBuild/ majorVersion := 0
-ThisBuild/ scalaVersion := "2.13.12"
+ThisBuild/ scalaVersion := "2.13.16"
 
 lazy val scalaCompilerOptions = Seq(
   "-Xlint:-missing-interpolator,_",
