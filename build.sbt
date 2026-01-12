@@ -3,25 +3,31 @@ val appName = "register-for-exchange-of-information"
 val silencerVersion = "1.7.16"
 
 ThisBuild/ majorVersion := 0
-ThisBuild/ scalaVersion := "3.3.7"
+ThisBuild/ scalaVersion := "3.3.4"
 
 lazy val scalaCompilerOptions = Seq(
   "-language:implicitConversions",
+
+  // Silence repeated-flag noise
   "-Wconf:msg=Flag.*repeatedly:s",
-  "-Wconf:cat=unused-imports&src=html/.*:s",
-  "-Wconf:msg=unused import&src=html/.*:s",
+
+  // Enable unused warnings
   "-Wunused:imports",
   "-Wunused:locals",
   "-Wunused:privates",
   "-Wunused:params",
+
+  // Generated Twirl templates
+  "-Wconf:msg=unused import&src=html/.*:s",
+
+  // Play routes files (.routes are not under routes/)
+  "-Wconf:msg=unused import&src=.*\\.routes:s",
+  "-Wconf:msg=unused import&src=html/.*:s",
+
   "-Wvalue-discard",
-  "-Xlint:-missing-interpolator",
-  "-deprecation",
-  "-feature",
-  "-unchecked",
-  "-Wconf:src=routes/.*:s",
-  "-Wconf:cat=unused-imports&src=routes/.*:s",
+  "-feature"
 )
+
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
