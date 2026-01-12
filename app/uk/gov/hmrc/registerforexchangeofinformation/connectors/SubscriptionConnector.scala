@@ -59,4 +59,5 @@ class SubscriptionConnector @Inject() (
       ec = ec
     )
   }
+
 }

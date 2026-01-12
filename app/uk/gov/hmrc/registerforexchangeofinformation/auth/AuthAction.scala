@@ -63,13 +63,14 @@ class AuthActionImpl @Inject() (
     credentialRole: Option[CredentialRole]
   ): Boolean =
     affinityGroup match {
-      case Some(Agent) => false
+      case Some(Agent)        => false
       case Some(Organisation) =>
         credentialRole.fold(false)(
           cr => cr == User
         )
-      case _ => true
+      case _                  => true
     }
+
 }
 
 @ImplementedBy(classOf[AuthActionImpl])

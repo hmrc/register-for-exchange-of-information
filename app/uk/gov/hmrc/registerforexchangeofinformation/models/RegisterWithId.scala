@@ -24,6 +24,7 @@ object RegisterWithID {
 
   implicit val format: Format[RegisterWithID] =
     Json.format[RegisterWithID]
+
 }
 
 case class RegisterWithIDRequest(
@@ -35,6 +36,7 @@ object RegisterWithIDRequest {
 
   implicit val format: Format[RegisterWithIDRequest] =
     Json.format[RegisterWithIDRequest]
+
 }
 
 sealed trait PartnerDetails
@@ -47,7 +49,7 @@ case class WithIDIndividual(
 ) extends PartnerDetails
 
 object WithIDIndividual {
-  implicit val format = Json.format[WithIDIndividual]
+  implicit val format: Format[WithIDIndividual] = Json.format[WithIDIndividual]
 }
 
 case class WithIDOrganisation(
@@ -56,7 +58,7 @@ case class WithIDOrganisation(
 ) extends PartnerDetails
 
 object WithIDOrganisation {
-  implicit val format = Json.format[WithIDOrganisation]
+  implicit val format: Format[WithIDOrganisation] = Json.format[WithIDOrganisation]
 }
 
 case class RequestWithIDDetails(
@@ -92,7 +94,7 @@ object RequestWithIDDetails {
             throw new Exception(
               "Request details cannot have both and organisation or individual element"
             )
-          case (Some(ind), _) =>
+          case (Some(ind), _)     =>
             RequestWithIDDetails(
               idType,
               idNumber,
@@ -100,7 +102,7 @@ object RequestWithIDDetails {
               isAnAgent,
               Option(ind)
             )
-          case (_, Some(org)) =>
+          case (_, Some(org))     =>
             RequestWithIDDetails(
               idType,
               idNumber,
@@ -108,7 +110,7 @@ object RequestWithIDDetails {
               isAnAgent,
               Option(org)
             )
-          case (None, None) =>
+          case (None, None)       =>
             RequestWithIDDetails(
               idType,
               idNumber,
@@ -164,4 +166,5 @@ object RequestWithIDDetails {
           "isAnAgent"         -> isAnAgent
         )
     }
+
 }

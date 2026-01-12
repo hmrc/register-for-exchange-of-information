@@ -23,4 +23,5 @@ object RetrievalOps {
   implicit class Ops[A](a: A) {
     def ~[B](b: B): A ~ B = new ~(a, b)
   }
+
 }

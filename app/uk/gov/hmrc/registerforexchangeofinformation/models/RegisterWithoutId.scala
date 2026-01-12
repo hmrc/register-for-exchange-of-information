@@ -43,6 +43,7 @@ object NoIdIndividual {
       (firstName, secondName, dob) => NoIdIndividual(Name(firstName, secondName), dob)
     )
   }
+
 }
 
 case class NoIdOrganisation(organisationName: String)
@@ -63,7 +64,7 @@ case class Address(
 )
 
 object Address {
-  implicit val addressFormat = Json.format[Address]
+  implicit val addressFormat: Format[Address] = Json.format[Address]
 }
 
 case class ContactDetails(
@@ -74,7 +75,7 @@ case class ContactDetails(
 )
 
 object ContactDetails {
-  implicit val contactFormats = Json.format[ContactDetails]
+  implicit val contactFormats: Format[ContactDetails] = Json.format[ContactDetails]
 }
 
 case class Identification(
@@ -84,13 +85,13 @@ case class Identification(
 )
 
 object Identification {
-  implicit val indentifierFormats = Json.format[Identification]
+  implicit val indentifierFormats: Format[Identification] = Json.format[Identification]
 }
 
 case class RequestParameter(paramName: String, paramValue: String)
 
 object RequestParameter {
-  implicit val indentifierFormats = Json.format[RequestParameter]
+  implicit val indentifierFormats: Format[RequestParameter] = Json.format[RequestParameter]
 }
 
 case class RequestCommon(
@@ -101,7 +102,7 @@ case class RequestCommon(
 )
 
 object RequestCommon {
-  implicit val requestCommonFormats = Json.format[RequestCommon]
+  implicit val requestCommonFormats: Format[RequestCommon] = Json.format[RequestCommon]
 }
 
 case class RequestDetails(
@@ -114,7 +115,7 @@ case class RequestDetails(
 
 object RequestDetails {
 
-  implicit lazy val residentWrites = Json.writes[RequestDetails]
+  implicit lazy val residentWrites: Writes[RequestDetails] = Json.writes[RequestDetails]
 
   implicit lazy val reads: Reads[RequestDetails] = {
     import play.api.libs.functional.syntax._
@@ -127,11 +128,11 @@ object RequestDetails {
     )(
       (organisation, individual, address, contactDetails, identification) =>
         (organisation, individual) match {
-          case (None, None) =>
+          case (None, None)               =>
             throw new Exception(
               "Request Details must have either an organisation or individual element"
             )
-          case (Some(_), Some(_)) =>
+          case (Some(_), Some(_))         =>
             throw new Exception(
               "Request details cannot have both and organisation or individual element"
             )
@@ -146,6 +147,7 @@ object RequestDetails {
         }
     )
   }
+
 }
 
 case class RegisterWithoutIDRequest(
@@ -154,7 +156,7 @@ case class RegisterWithoutIDRequest(
 )
 
 object RegisterWithoutIDRequest {
-  implicit val format = Json.format[RegisterWithoutIDRequest]
+  implicit val format: Format[RegisterWithoutIDRequest] = Json.format[RegisterWithoutIDRequest]
 }
 
 case class RegisterWithoutId(
@@ -162,5 +164,5 @@ case class RegisterWithoutId(
 )
 
 object RegisterWithoutId {
-  implicit val format = Json.format[RegisterWithoutId]
+  implicit val format: Format[RegisterWithoutId] = Json.format[RegisterWithoutId]
 }

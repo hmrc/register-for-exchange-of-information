@@ -26,6 +26,7 @@ object OrganisationDetails {
 
   implicit val format: OFormat[OrganisationDetails] =
     Json.format[OrganisationDetails]
+
 }
 
 case class IndividualDetails(
@@ -38,6 +39,7 @@ object IndividualDetails {
 
   implicit val format: OFormat[IndividualDetails] =
     Json.format[IndividualDetails]
+
 }
 
 case class ContactInformationForIndividual(
@@ -51,6 +53,7 @@ object ContactInformationForIndividual {
 
   implicit val format: OFormat[ContactInformationForIndividual] =
     Json.format[ContactInformationForIndividual]
+
 }
 
 case class ContactInformationForOrganisation(
@@ -64,6 +67,7 @@ object ContactInformationForOrganisation {
 
   implicit val format: OFormat[ContactInformationForOrganisation] =
     Json.format[ContactInformationForOrganisation]
+
 }
 
 case class PrimaryContact(contactInformation: ContactInformation)
@@ -99,7 +103,7 @@ object PrimaryContact {
                 mobile
               )
             )
-          case _ =>
+          case _             =>
             throw new Exception(
               "Primary Contact must have either an organisation or individual element"
             )
@@ -122,6 +126,7 @@ object PrimaryContact {
         ) =>
       Json.toJsObject(contactInformationForOrg)
   }
+
 }
 
 case class SecondaryContact(contactInformation: ContactInformation)
@@ -157,7 +162,7 @@ object SecondaryContact {
                 mobile
               )
             )
-          case _ =>
+          case _             =>
             throw new Exception(
               "Secondary Contact must have either an organisation or individual element"
             )
@@ -180,6 +185,7 @@ object SecondaryContact {
         ) =>
       Json.toJsObject(contactInformationForOrg)
   }
+
 }
 
 case class RequestDetail(
@@ -195,6 +201,7 @@ object RequestDetail {
 
   implicit val requestDetailFormats: OFormat[RequestDetail] =
     Json.format[RequestDetail]
+
 }
 
 case class RequestParameters(paramName: String, paramValue: String)
@@ -203,6 +210,7 @@ object RequestParameters {
 
   implicit val indentifierFormats: OFormat[RequestParameters] =
     Json.format[RequestParameters]
+
 }
 
 case class RequestCommonForSubscription(
@@ -218,6 +226,7 @@ object RequestCommonForSubscription {
 
   implicit val requestCommonForSubscriptionFormats: OFormat[RequestCommonForSubscription] =
     Json.format[RequestCommonForSubscription]
+
 }
 
 case class SubscriptionRequest(
@@ -229,6 +238,7 @@ object SubscriptionRequest {
 
   implicit val format: OFormat[SubscriptionRequest] =
     Json.format[SubscriptionRequest]
+
 }
 
 case class CreateSubscriptionForMDRRequest(
@@ -239,6 +249,7 @@ object CreateSubscriptionForMDRRequest {
 
   implicit val format: OFormat[CreateSubscriptionForMDRRequest] =
     Json.format[CreateSubscriptionForMDRRequest]
+
 }
 
 case class ReturnParameters(paramName: String, paramValue: String)
@@ -264,6 +275,7 @@ object ResponseDetailForMDRSubscription {
 
   implicit val format: OFormat[ResponseDetailForMDRSubscription] =
     Json.format[ResponseDetailForMDRSubscription]
+
 }
 
 case class SubscriptionForMDRResponse(
@@ -285,6 +297,7 @@ object SubscriptionForMDRResponse {
 
   implicit val writes: OWrites[SubscriptionForMDRResponse] =
     Json.writes[SubscriptionForMDRResponse]
+
 }
 
 case class CreateSubscriptionForMDRResponse(
@@ -295,4 +308,5 @@ object CreateSubscriptionForMDRResponse {
 
   implicit val format: OFormat[CreateSubscriptionForMDRResponse] =
     Json.format[CreateSubscriptionForMDRResponse]
+
 }

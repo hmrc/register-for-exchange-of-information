@@ -24,6 +24,7 @@ object ReadSubscriptionRequestDetail {
 
   implicit val format: OFormat[ReadSubscriptionRequestDetail] =
     Json.format[ReadSubscriptionRequestDetail]
+
 }
 
 case class DisplaySubscriptionDetails(
@@ -35,6 +36,7 @@ object DisplaySubscriptionDetails {
 
   implicit val format: OFormat[DisplaySubscriptionDetails] =
     Json.format[DisplaySubscriptionDetails]
+
 }
 
 case class DisplaySubscriptionForMDRRequest(
@@ -45,4 +47,5 @@ object DisplaySubscriptionForMDRRequest {
 
   implicit val format: OFormat[DisplaySubscriptionForMDRRequest] =
     Json.format[DisplaySubscriptionForMDRRequest]
+
 }

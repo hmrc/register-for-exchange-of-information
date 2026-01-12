@@ -50,4 +50,5 @@ class RegistrationConnector @Inject() (
       headers = extraHeaders(config, serviceName)
     )(wts = RegisterWithID.format, rds = httpReads, hc = hc, ec = ec)
   }
+
 }
