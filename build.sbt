@@ -3,23 +3,31 @@ val appName = "register-for-exchange-of-information"
 val silencerVersion = "1.7.16"
 
 ThisBuild/ majorVersion := 0
-ThisBuild/ scalaVersion := "2.13.16"
+ThisBuild/ scalaVersion := "3.3.4"
 
 lazy val scalaCompilerOptions = Seq(
-  "-Xlint:-missing-interpolator,_",
-  "-Ywarn-unused:imports",
-  "-Ywarn-unused:privates",
-  "-Ywarn-unused:locals",
-  "-Ywarn-unused:explicits",
-  "-Ywarn-unused:implicits",
-  "-Ywarn-value-discard",
-  "-Ywarn-unused:patvars",
-  "-Ywarn-dead-code",
-  "-deprecation",
-  "-feature",
-  "-unchecked",
-  "-language:implicitConversions"
+  "-language:implicitConversions",
+
+  // Silence repeated-flag noise
+  "-Wconf:msg=Flag.*repeatedly:s",
+
+  // Enable unused warnings
+  "-Wunused:imports",
+  "-Wunused:locals",
+  "-Wunused:privates",
+  "-Wunused:params",
+
+  // Generated Twirl templates
+  "-Wconf:msg=unused import&src=html/.*:s",
+
+  // Play routes files (.routes are not under routes/)
+  "-Wconf:msg=unused import&src=.*\\.routes:s",
+  "-Wconf:msg=unused import&src=html/.*:s",
+
+  "-Wvalue-discard",
+  "-feature"
 )
+
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
@@ -29,8 +37,6 @@ lazy val microservice = Project(appName, file("."))
     Compile / scalafmtOnCompile := true,
     Test / scalafmtOnCompile := true,
     scalacOptions ++= scalaCompilerOptions,
-    scalacOptions += "-Wconf:src=routes/.*:s",
-    scalacOptions += "-Wconf:cat=unused-imports&src=routes/.*:s",
     PlayKeys.playDefaultPort := 10016
   )
   .settings(ScoverageSettings.settings: _*)

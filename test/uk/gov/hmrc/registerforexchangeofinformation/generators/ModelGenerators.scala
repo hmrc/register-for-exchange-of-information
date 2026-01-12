@@ -167,12 +167,12 @@ trait ModelGenerators {
         idNumber          <- arbitrary[String]
         requiresNameMatch <- arbitrary[Boolean]
         isAnAgent         <- arbitrary[Boolean]
-        partnerDetails <- Gen.option(
-          Gen.oneOf(
-            arbitrary[WithIDIndividual],
-            arbitrary[WithIDOrganisation]
-          )
-        )
+        partnerDetails    <- Gen.option(
+                               Gen.oneOf(
+                                 arbitrary[WithIDIndividual],
+                                 arbitrary[WithIDOrganisation]
+                               )
+                             )
       } yield RequestWithIDDetails(
         idType,
         idNumber,
@@ -197,8 +197,8 @@ trait ModelGenerators {
       for {
         organisationName <- arbitrary[String]
         organisationType <- Gen.oneOf(
-          Seq("0000", "0001", "0002", "0003", "0004")
-        )
+                              Seq("0000", "0001", "0002", "0003", "0004")
+                            )
       } yield WithIDOrganisation(organisationName, organisationType)
     }
 
@@ -268,9 +268,9 @@ trait ModelGenerators {
   implicit val arbitraryPrimaryContact: Arbitrary[PrimaryContact] = Arbitrary {
     for {
       contactInformation <- Gen.oneOf(
-        arbitrary[ContactInformationForIndividual],
-        arbitrary[ContactInformationForIndividual]
-      )
+                              arbitrary[ContactInformationForIndividual],
+                              arbitrary[ContactInformationForIndividual]
+                            )
     } yield PrimaryContact(contactInformation)
   }
 
@@ -278,9 +278,9 @@ trait ModelGenerators {
     Arbitrary {
       for {
         contactInformation <- Gen.oneOf(
-          arbitrary[ContactInformationForIndividual],
-          arbitrary[ContactInformationForIndividual]
-        )
+                                arbitrary[ContactInformationForIndividual],
+                                arbitrary[ContactInformationForIndividual]
+                              )
       } yield SecondaryContact(contactInformation)
     }
 
@@ -331,4 +331,5 @@ trait ModelGenerators {
         DisplaySubscriptionDetails(requestCommon, requestDetail)
       )
     }
+
 }

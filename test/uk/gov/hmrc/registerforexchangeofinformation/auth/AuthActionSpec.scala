@@ -18,7 +18,8 @@ package uk.gov.hmrc.registerforexchangeofinformation.auth
 
 import org.apache.pekko.util.Timeout
 import org.mockito.ArgumentMatchers.any
-import org.mockito.MockitoSugar
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar.mock
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.http.Status.{OK, UNAUTHORIZED}
@@ -31,15 +32,15 @@ import play.api.{Application, Configuration}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Individual, Organisation}
 import uk.gov.hmrc.auth.core.authorise.Predicate
 import uk.gov.hmrc.auth.core.retrieve.{~, Retrieval}
-import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.registerforexchangeofinformation.auth.RetrievalOps._
+import uk.gov.hmrc.registerforexchangeofinformation.auth.RetrievalOps.*
 
-import scala.concurrent.duration._
+import scala.concurrent.duration.*
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.postfixOps
 
-class AuthActionSpec extends PlaySpec with GuiceOneAppPerSuite with MockitoSugar {
+class AuthActionSpec extends PlaySpec with GuiceOneAppPerSuite {
 
   class Harness(authAction: AuthAction) extends InjectedController {
 
@@ -47,7 +48,9 @@ class AuthActionSpec extends PlaySpec with GuiceOneAppPerSuite with MockitoSugar
       _ =>
         Ok
     }
+
   }
+
   type AuthRetrievals = Option[AffinityGroup] ~ Option[CredentialRole]
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]

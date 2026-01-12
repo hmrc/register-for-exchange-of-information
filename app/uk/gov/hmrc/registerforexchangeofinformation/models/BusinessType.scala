@@ -57,4 +57,5 @@ object BusinessType {
     case JsString("Not Specified")       => JsSuccess(other)
     case _                               => JsError()
   }
+
 }

@@ -16,12 +16,12 @@
 
 package uk.gov.hmrc.registerforexchangeofinformation.models
 
-import play.api.libs.json.Json
+import play.api.libs.json.{Format, Json}
 
 case class SourceFaultDetail(detail: Seq[String])
 
 object SourceFaultDetail {
-  implicit val format = Json.format[SourceFaultDetail]
+  implicit val format: Format[SourceFaultDetail] = Json.format[SourceFaultDetail]
 }
 
 case class ErrorDetail(
@@ -34,11 +34,11 @@ case class ErrorDetail(
 )
 
 object ErrorDetail {
-  implicit val format = Json.format[ErrorDetail]
+  implicit val format: Format[ErrorDetail] = Json.format[ErrorDetail]
 }
 
 case class ErrorDetails(errorDetail: ErrorDetail)
 
 object ErrorDetails {
-  implicit val format = Json.format[ErrorDetails]
+  implicit val format: Format[ErrorDetails] = Json.format[ErrorDetails]
 }

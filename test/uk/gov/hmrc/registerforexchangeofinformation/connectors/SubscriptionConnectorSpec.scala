@@ -116,4 +116,5 @@ class SubscriptionConnectorSpec extends SpecBase with WireMockServerHandler with
             .withStatus(expectedStatus)
         )
     )
+
 }

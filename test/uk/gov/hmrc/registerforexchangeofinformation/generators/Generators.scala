@@ -46,7 +46,7 @@ trait Generators extends ModelGenerators {
     } yield seq1.toSeq.zip(seq2).foldRight("") {
       case ((n, Some(v)), m) =>
         m + n + v
-      case ((n, _), m) =>
+      case ((n, _), m)       =>
         m + n
     }
   }
@@ -145,6 +145,7 @@ trait Generators extends ModelGenerators {
 
   val ninoRegex =
     "^([ACEHJLMOPRSWXY][A-CEGHJ-NPR-TW-Z]|B[A-CEHJ-NPR-TW-Z]|G[ACEGHJ-NPR-TW-Z]|[KT][A-CEGHJ-MPR-TW-Z]|N[A-CEGHJL-NPR-SW-Z]|Z[A-CEGHJ-NPR-TW-Y])[0-9]{6}[A-D ]$"
+
   def validNino: Gen[String] = RegexpGen.from(ninoRegex)
 
   val apiOrgName                = "^([a-zA-Z0-9_.]{1,105})\\$"

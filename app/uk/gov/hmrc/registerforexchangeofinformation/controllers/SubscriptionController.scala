@@ -76,8 +76,8 @@ class SubscriptionController @Inject() (
 
   private def convertToResult(httpResponse: HttpResponse): Result =
     httpResponse.status match {
-      case OK        => Ok(httpResponse.body)
-      case NOT_FOUND => NotFound(httpResponse.body)
+      case OK          => Ok(httpResponse.body)
+      case NOT_FOUND   => NotFound(httpResponse.body)
       case BAD_REQUEST =>
         logDownStreamError(httpResponse.body)
         BadRequest(httpResponse.body)
@@ -107,8 +107,9 @@ class SubscriptionController @Inject() (
         logger.warn(
           s"Error with submission: ${value.errorDetail.sourceFaultDetail.map(_.detail.mkString)}"
         )
-      case _ =>
+      case _                            =>
         logger.warn("Error with submission but return is not a valid json")
     }
   }
+
 }

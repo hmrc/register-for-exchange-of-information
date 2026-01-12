@@ -141,4 +141,5 @@ class RegistrationConnectorSpec extends SpecBase with WireMockServerHandler with
             .withStatus(expectedStatus)
         )
     )
+
 }

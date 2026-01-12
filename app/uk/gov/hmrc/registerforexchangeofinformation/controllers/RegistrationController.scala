@@ -122,8 +122,9 @@ class RegistrationController @Inject() (
         logger.warn(
           s"Error with submission: ${value.errorDetail.sourceFaultDetail.map(_.detail.mkString)}"
         )
-      case _ =>
+      case _                            =>
         logger.warn("Error with submission but return is not a valid json")
     }
   }
+
 }

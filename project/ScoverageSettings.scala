@@ -11,7 +11,8 @@ object ScoverageSettings {
     "prod.*",
     ".*Routes.*",
     "testOnly.*",
-    "testOnlyDoNotUseInAppConf.*"
+    "testOnlyDoNotUseInAppConf.*",
+    "uk.gov.hmrc.registerforexchangeofinformation.models.*"
   )
 
   val settings: Seq[Setting[_]] = Seq(

@@ -31,4 +31,5 @@ class FakeAuthAction @Inject() (
     block: Request[A] => Future[Result]
   ): Future[Result] =
     block(request)
+
 }
