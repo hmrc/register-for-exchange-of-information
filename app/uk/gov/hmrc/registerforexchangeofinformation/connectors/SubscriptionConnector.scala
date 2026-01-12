@@ -17,47 +17,34 @@
 package uk.gov.hmrc.registerforexchangeofinformation.connectors
 
 import com.google.inject.Inject
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import play.api.libs.json.Json
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
 import uk.gov.hmrc.registerforexchangeofinformation.models.{CreateSubscriptionForMDRRequest, DisplaySubscriptionForMDRRequest}
 
+import java.net.URI
 import scala.concurrent.{ExecutionContext, Future}
 
-class SubscriptionConnector @Inject() (
-  val config: AppConfig,
-  val http: HttpClient
-) {
+class SubscriptionConnector @Inject() (val config: AppConfig, val http: HttpClientV2) {
 
-  def sendSubscriptionInformation(
-    subscription: CreateSubscriptionForMDRRequest
-  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  def sendSubscriptionInformation(subscription: CreateSubscriptionForMDRRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val serviceName = "create-subscription"
-    http.POST[CreateSubscriptionForMDRRequest, HttpResponse](
-      config.baseUrl(serviceName),
-      subscription,
-      headers = extraHeaders(config, serviceName)
-    )(
-      wts = CreateSubscriptionForMDRRequest.format,
-      rds = httpReads,
-      hc = hc,
-      ec = ec
-    )
+    http
+      .post(new URI(config.baseUrl(serviceName)).toURL)
+      .withBody(Json.toJson(subscription))
+      .setHeader(extraHeaders(config, serviceName): _*)
+      .execute[HttpResponse]
   }
 
-  def readSubscriptionInformation(
-    subscription: DisplaySubscriptionForMDRRequest
-  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  def readSubscriptionInformation(subscription: DisplaySubscriptionForMDRRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val serviceName = "read-subscription"
-    http.POST[DisplaySubscriptionForMDRRequest, HttpResponse](
-      config.baseUrl(serviceName),
-      subscription,
-      headers = extraHeaders(config, serviceName)
-    )(
-      wts = DisplaySubscriptionForMDRRequest.format,
-      rds = httpReads,
-      hc = hc,
-      ec = ec
-    )
+    http
+      .post(new URI(config.baseUrl(serviceName)).toURL)
+      .withBody(Json.toJson(subscription))
+      .setHeader(extraHeaders(config, serviceName): _*)
+      .execute[HttpResponse]
   }
 
 }

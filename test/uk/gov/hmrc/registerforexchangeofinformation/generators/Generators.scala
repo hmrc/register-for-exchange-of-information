@@ -143,7 +143,7 @@ trait Generators extends ModelGenerators {
   val utrRegex              = "^[0-9]*$"
   def validUtr: Gen[String] = RegexpGen.from(utrRegex)
 
-  val ninoRegex              =
+  val ninoRegex =
     "^([ACEHJLMOPRSWXY][A-CEGHJ-NPR-TW-Z]|B[A-CEHJ-NPR-TW-Z]|G[ACEGHJ-NPR-TW-Z]|[KT][A-CEGHJ-MPR-TW-Z]|N[A-CEGHJL-NPR-SW-Z]|Z[A-CEGHJ-NPR-TW-Y])[0-9]{6}[A-D ]$"
 
   def validNino: Gen[String] = RegexpGen.from(ninoRegex)

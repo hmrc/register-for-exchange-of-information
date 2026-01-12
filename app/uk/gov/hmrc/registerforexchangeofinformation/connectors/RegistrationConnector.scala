@@ -17,38 +17,34 @@
 package uk.gov.hmrc.registerforexchangeofinformation.connectors
 
 import com.google.inject.Inject
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import play.api.libs.json.Json
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.registerforexchangeofinformation.config.AppConfig
 import uk.gov.hmrc.registerforexchangeofinformation.models.{RegisterWithID, RegisterWithoutId}
 
+import java.net.URI
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegistrationConnector @Inject() (
-  val config: AppConfig,
-  val http: HttpClient
-) {
+class RegistrationConnector @Inject() (val config: AppConfig, val http: HttpClientV2) {
 
-  def sendWithoutIDInformation(
-    registration: RegisterWithoutId
-  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  def sendWithoutIDInformation(registration: RegisterWithoutId)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val serviceName = "register-without-id"
-    http.POST[RegisterWithoutId, HttpResponse](
-      config.baseUrl(serviceName),
-      registration,
-      headers = extraHeaders(config, serviceName)
-    )(wts = RegisterWithoutId.format, rds = httpReads, hc = hc, ec = ec)
+    http
+      .post(new URI(config.baseUrl(serviceName)).toURL)
+      .setHeader(extraHeaders(config, serviceName): _*)
+      .withBody(Json.toJson(registration))
+      .execute[HttpResponse]
   }
 
-  def sendWithID(
-    registration: RegisterWithID
-  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  def sendWithID(registration: RegisterWithID)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val serviceName = "register-with-id"
-
-    http.POST[RegisterWithID, HttpResponse](
-      config.baseUrl(serviceName),
-      registration,
-      headers = extraHeaders(config, serviceName)
-    )(wts = RegisterWithID.format, rds = httpReads, hc = hc, ec = ec)
+    http
+      .post(new URI(config.baseUrl(serviceName)).toURL)
+      .setHeader(extraHeaders(config, serviceName): _*)
+      .withBody(Json.toJson(registration))
+      .execute[HttpResponse]
   }
 
 }
